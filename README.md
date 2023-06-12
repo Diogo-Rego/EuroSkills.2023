@@ -1,1 +1,1 @@
-# EuroSkills.2023 hello friend 
+# EuroSkills.2023
