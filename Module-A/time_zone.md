@@ -12,7 +12,7 @@ This command will display a long list of timezones. Scroll through the output to
 ```
 sudo timedatectl set-timezone [timezone]
 ```
-Replace ``[timezone]`` with the timezone you want to configure. For example, to set the timezone to "America/New_York," the command would be:
+Replace ``[timezone]`` with the timezone you want to configure. For example, to set the timezone to "Europe/Warsaw," the command would be:
 
 3. After running the command, timedatectl will update the system's timezone configuration.
 
