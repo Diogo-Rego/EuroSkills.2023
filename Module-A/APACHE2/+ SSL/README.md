@@ -68,10 +68,14 @@ cat certificate.crt intermediate.crt > yourdomain.crt
 sudo a2ensite mydomain.conf
 ```
 
-### Step 7: Restart Apache2: Restart Apache2 to apply the changes:
+### Step 7: Restart Apache2
+
+- Restart Apache2 to apply the changes:
 
 ```
 sudo service apache2 restart
 ```
 
-### Step 8: Test HTTPS: Open a web browser and enter your domain name with ``https://`` (e.g., ``https://yourdomain.com``). If the configuration is correct, you should see your website served over HTTPS.
+### Step 8: Test HTTPS
+
+- Open a web browser and enter your domain name with ``https://`` (e.g., ``https://yourdomain.com``). If the configuration is correct, you should see your website served over HTTPS.
