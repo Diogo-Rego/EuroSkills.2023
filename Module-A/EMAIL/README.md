@@ -94,4 +94,4 @@ sudo systemctl restart postfix
 sudo systemctl restart dovecot
 ```
 
-- That's a basic outline of setting up an email server in Debian using Postfix and Dovecot. Configuring and securing an email server requires additional considerations, such as setting up spam filters, enabling SSL/TLS, configuring DNS records, and implementing security best practices. It's recommended to consult detailed documentation or seek professional assistance when setting up an email server for production use.
+That's a basic outline of setting up an email server in Debian using Postfix and Dovecot. Configuring and securing an email server requires additional considerations, such as setting up spam filters, enabling SSL/TLS, configuring DNS records, and implementing security best practices. It's recommended to consult detailed documentation or seek professional assistance when setting up an email server for production use.
