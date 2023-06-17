@@ -1,18 +1,18 @@
-## DHCP failover 
-Install the DHCP server 
+## DHCP failover
+Install the DHCP server
 ```
 apt-get install isc-dhcp-server
 ```
 
-DHCP configuration folder 
+DHCP configuration folder
 ```
 cd /etc/dhcp
 ```
-DHCP configuration file 
+DHCP configuration file
 ```
 nano dhcpd.conf
 ```
-DHCP configuration 
+DHCP configuration
 
 ```
 option domain-name "Firmatpolska.pl"; 
@@ -20,9 +20,9 @@ option domain-name-servers 192.168.30.254 ;
 authoritative;
 subnet 192.168.30.0 netmask 255.255.255.0 {~
     failover peer "failover" {
-        secondary;
-        address 192.168.10.2; 
-        peer address 192.168.10.1; 
+        primary;
+        address 192.168.10.1; 
+        peer address 192.168.10.2; 
         mclt 1800;
         split 128;
     }
@@ -35,8 +35,7 @@ subnet 192.168.30.0 netmask 255.255.255.0 {~
     }
 }
 ```
-
-Restart DHCP server
+Restart DHCP server 
 ```
 systemctl enable isc-dhcp-server
 systemctl restart isc-dhcp-server
