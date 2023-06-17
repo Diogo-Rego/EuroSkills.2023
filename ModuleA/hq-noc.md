@@ -1,10 +1,18 @@
-DHCP failover 
-
+## DHCP failover 
+Install the DHCP server 
+```
 apt-get install isc-dhcp-server
+```
 
+DHCP configuration folder 
+```
 cd /etc/dhcp
-
+```
+DHCP configuration file 
+```
 nano dhcpd.conf
+```
+DHCP configuration 
 
 ```
 option domain-name "Firmatpolska.pl"; 
