@@ -3,11 +3,14 @@ Install the DHCP server
 ```
 apt-get install isc-dhcp-server
 ```
+missing the config to indicate with interface to deal the ip addresses
 
 DHCP configuration folder 
 ```
 cd /etc/dhcp
 ```
+
+
 DHCP configuration file 
 ```
 nano dhcpd.conf
