@@ -35,7 +35,16 @@ subnet 192.168.30.0 netmask 255.255.255.0 {~
     }
 }
 ```
-Restart DHCP server 
+
+If you need to config a static ip with DHCP
+```
+host *hostname {
+    hardware ethernet X:X:X:X:X:X; # MAC ADDRESS
+    fixed-address X.X.X.X 
+}
+```
+
+Restart DHCP server
 ```
 systemctl enable isc-dhcp-server
 systemctl restart isc-dhcp-server
