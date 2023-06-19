@@ -40,16 +40,14 @@ nano vars
 ```
 set_var EASYRSA_DN      "org"
 
-set_var EASYRSA_REQ_COUNTRY     "PL"
+set_var EASYRSA_REQ_COUNTRY     ""
 set_var EASYRSA_REQ_PROVINCE    ""
 set_var EASYRSA_REQ_CITY        ""
-set_var EASYRSA_REQ_ORG "Firma Tradycyjna Polska Sp. z o.o."
+set_var EASYRSA_REQ_ORG         ""
 set_var EASYRSA_REQ_EMAIL       ""
 set_var EASYRSA_REQ_OU          ""
 
-set_var EASYRSA_REQ_CN          "Firma Tradycyjna Polska Sp. z o.o. Root CA"
-
-set_var EASYRSA_BATCH           "yes"
+set_var EASYRSA_REQ_CN          ""
 ```
 
 - Adjust the values to match your desired organization details.
