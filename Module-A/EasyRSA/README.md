@@ -5,8 +5,6 @@
   <h1 align="center">EasyRSA</h1>
 </p>
 
-# EasyRSA
-
 ### Step 1: Install EasyRSA on your Debian system if you haven't already. You can typically do this by installing the ``easy-rsa`` package:
 
 ```
@@ -69,13 +67,13 @@ set_var EASYRSA_BATCH           "yes"
 
 ### Step 9: Sign the certificate using the CA:
 
-- For Server:
+* For Server:
 
 ```
 ./easyrsa build-server-full srv.name nopass
 ```
 
-- For Client:
+* For Client:
 
 ```
 ./easyrsa build-clint-full cli.name nopass
