@@ -82,3 +82,8 @@ set_var EASYRSA_REQ_CN          ""
 ```
 ./easyrsa --subject-alt-name="DNS:www.test.pt" sign-req server www.test.pt
 ```
+
+
+```
+./easyrsa help altname
+```
