@@ -3,7 +3,7 @@
 ### Step 1: Install Apache2
 
 ```
-sudo apt-get install apache2
+sudo apt install apache2
 ```
 
 ### Step 2: Locate the Apache2 Document Root 
