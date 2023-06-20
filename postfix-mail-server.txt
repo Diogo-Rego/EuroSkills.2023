@@ -1,0 +1,64 @@
+adduser [user]
+
+(1)
+apt install postfix
+(options)
+Internet Site
+domain_name
+
+(3)
+dpkg-reconfigure postfix
+(options)
+Internet Site
+domain_name
+none
+none
+no
+0.0.0.0/0
+0
+none
+all
+
+(4)
+telnet gmail-smtp-in.l.google.com 25
+quit
+
+(5)
+apt install mailutils
+(test)
+/usr/sbin/sendmail example@gmail.com
+[text]
+Ctrl + D
+
+(6)
+nano /etc/postfix/main.cf
+```
+smtpd_tls_cert_file=/ca/a/smtp.firmatpolska.pl.crt
+smtpd_tls_key_file=/ca/a/smtp.firmatpolska.pl.key
+smtpd_tls_security_level=may
+
+smtp_tls_CApath=/etc/ssl/certs
+smtp_tls_security_level=may
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+myhostname = dmz-host.firmatpolska.pl
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+myorigin = /etc/mailname
+mydestination = dmz-host.firmatpolska.pl, firmatpolska.pl, dmz-host, smtp.firmatpolska.pl, localhost.localdomain, localhost
+relayhost =
+mynetworks = 0.0.0.0/0
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+inet_protocols = all
+home_mailbox = Maildir/
+```
+
+(7)
+apt install dovecot-imapd dovecot-pop3d
+
+nano /etc/dovecot/dovecot.conf
+```
+protocols = imap pop3
+```
