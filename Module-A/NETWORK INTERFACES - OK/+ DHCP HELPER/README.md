@@ -28,7 +28,7 @@ iface eth0 inet static
 ### Step 3: Below the existing interface settings, add the line ``dhcp-helper`` followed by the IP address of the DHCP server.
 
 - For example:
--
+
 ```
 auto eth0
 iface eth0 inet static
