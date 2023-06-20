@@ -5,7 +5,7 @@
 - Install the Postfix mail server:
 
 ```
-sudo apt-get install postfix
+sudo apt install postfix
 ```
 
 - During the installation process, select "Internet Site" as the configuration type, and enter your domain name when prompted.
@@ -13,7 +13,7 @@ sudo apt-get install postfix
 - Install other required packages, such as Dovecot for handling incoming email and authentication:
 
 ```
-sudo apt-get install dovecot-core dovecot-imapd dovecot-pop3d
+sudo apt install dovecot-core dovecot-imapd dovecot-pop3d
 ```
 
 ### Step 2: Configure Postfix

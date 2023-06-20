@@ -3,8 +3,8 @@
 ### Step 1: Install Bind9
 
 ```
-sudo apt-get update
-sudo apt-get install bind9 resol
+sudo apt update
+sudo apt install bind9 resolvconf
 ```
 
 ### Step 2: Configure Bind9
