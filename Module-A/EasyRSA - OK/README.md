@@ -5,6 +5,22 @@
   <h1 align="center">EasyRSA</h1>
 </p>
 
+### To view the manual pages for Easy-RSA, you can use the ``./easyrsa`` command followed by the ``help`` command you want to learn more about.
+
+- Here are some examples:
+
+  - To view the manual page for the ``easyrsa`` command itself:
+
+```
+./easyrsa help
+```
+
+  - To view the manual page for a specific Easy-RSA command, such as ``alt-name``:
+
+```
+./easyrsa help altname
+```
+
 ### Step 1: Install EasyRSA on your Debian system if you haven't already. You can typically do this by installing the ``easy-rsa`` package:
 
 ```
@@ -48,6 +64,8 @@ set_var EASYRSA_REQ_EMAIL       ""
 set_var EASYRSA_REQ_OU          ""
 
 set_var EASYRSA_REQ_CN          ""
+
+set_var EASYRSA_BATCH          "yes"
 ```
 
 - Adjust the values to match your desired organization details.
@@ -81,9 +99,4 @@ set_var EASYRSA_REQ_CN          ""
 
 ```
 ./easyrsa --subject-alt-name="DNS:www.test.pt" sign-req server www.test.pt
-```
-
-
-```
-./easyrsa help altname
 ```
