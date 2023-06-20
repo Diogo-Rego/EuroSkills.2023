@@ -10,46 +10,10 @@
 - Ensure that PHP is installed on your Apache2 server. You can install PHP by running the appropriate command for your operating system. For example, on Ubuntu or Debian, you can use the following command:
 
 ```
-sudo apt install php
+sudo apt install libapache2-mod-php
 ```
 
-### Step 2: Configure Apache2 to process PHP files
-
-- By default, Apache2 may not be configured to process PHP files. You need to enable the ``php`` module in Apache2. Run the following command to enable the module:
-
-```
-sudo a2enmod php
-```
-
-### Step 3: Configure Apache2 to handle ``.php`` files
-
-- Edit the Apache2 configuration file for your domain (e.g., ``mydomain.conf``) or the default configuration file (``/etc/apache2/sites-available/000-default.conf``). Add or modify the following lines inside the ``<VirtualHost>`` block:
-
-```
-<VirtualHost *:80>
-    ServerName yourdomain.com
-    ServerAlias www.yourdomain.com
-    DocumentRoot /var/www/html
-
-    <Directory /var/www/html>
-        Options FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
-
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
-
-    # Add the following lines to handle PHP files
-    <FilesMatch \.php$>
-        SetHandler application/x-httpd-php
-    </FilesMatch>
-</VirtualHost>
-```
-
-- Save the configuration file and exit the text editor.
-
-### Step 4: Create a ``phpinfo.php`` file
+### Step 2: Create a ``phpinfo.php`` file
 
 - In the Apache2 DocumentRoot directory (``/var/www/html`` by default), create a new file named ``phpinfo.php``:
 
@@ -60,7 +24,7 @@ sudo nano /var/www/html/phpinfo.php
 - Inside the file, add the following line:
 
 ```
-<?php phpinfo(); ?>
+<?php phpinfo();?>
 ```
 
 - Save the file and exit the text editor.
