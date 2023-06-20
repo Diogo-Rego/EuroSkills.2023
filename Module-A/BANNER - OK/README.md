@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/Diogo-Rego/EuroSkills.2023/tree/main/Module-A/BANNER#banner">
+  <a href="">
     <img src="../img/banner.png" alt="BANNER" width="160" height="160">
   </a>
   <h1 align="center">BANNER</h1>
