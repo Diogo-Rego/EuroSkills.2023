@@ -49,13 +49,13 @@ sudo nano /etc/bind/named.conf.local
 zone "localhost" {
     type master;
     file "/var/cache/bind/db.localhost.com";
-    allow-transfer { none; };
+    allow-update { none; };
 };
 
 zone "x.x.x.in-addr.arpa" {
     type master;
     file "/var/cache/bind/db.x.x.x";
-    allow-transfer { none; };
+    allow-update { none; };
 };
 ```
 
