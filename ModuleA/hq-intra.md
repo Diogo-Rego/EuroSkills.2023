@@ -70,4 +70,3 @@ dpkg-reconfigure slapd
 <MDB>
 <no>
 <yes>
-

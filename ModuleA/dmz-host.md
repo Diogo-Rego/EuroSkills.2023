@@ -1,7 +1,7 @@
 ## DNS 
 Install Bind9 for DNS server 
 ```
-apt-get install bind9 
+apt-get install bind9
 ```
 DNS configuration folder 
 ```
