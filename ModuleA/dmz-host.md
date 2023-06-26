@@ -43,3 +43,11 @@ zone "30.168.192.in-addr.arpa." {
     file "/etc/bind/db.192.168.30";
 };
 ```
+
+to config ddns 
+
+generate a key 
+
+put the same key on named.conf.local and dhcpd.conf 
+
+then put 
