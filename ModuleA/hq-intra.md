@@ -28,8 +28,7 @@ subnet 192.168.30.0 netmask 255.255.255.0 {~
         split 128;
     }
     option routers 192.168.30.254;
-    option domain-name "firmatpolska.pl";
-    option domain-name-servers 192.168.30.254;
+    
     pool {
         range 192.168.30.1 192.168.30.253;
         failover peer "failover";
@@ -50,3 +49,25 @@ Restart DHCP server
 systemctl enable isc-dhcp-server
 systemctl restart isc-dhcp-server
 ```
+
+
+
+
+apt install slapd ldap-utils 
+
+nano /etc/ldap/ldap.conf
+
+
+BASE    dc=openldap-tutorial,dc=local
+URI     ldap://ldap.example.com ldap://ldap-master.example.com:666
+
+TLS_CACERT      /etc/ssl/certs/ca-certificates.crt
+
+dpkg-reconfigure slapd
+
+<firmatpolska.pl>
+<firmatpolska>
+<MDB>
+<no>
+<yes>
+
