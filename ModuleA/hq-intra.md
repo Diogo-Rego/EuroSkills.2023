@@ -9,70 +9,45 @@ DHCP configuration folder
 ```
 cd /etc/dhcp
 ```
-DHCP configuration file
-```
-nano dhcpd.conf
-```
-DHCP configuration
-
-```
-option domain-name "Firmatpolska.pl"; 
-option domain-name-servers 192.168.30.254 ;
-authoritative;
-subnet 192.168.30.0 netmask 255.255.255.0 {~
-    failover peer "failover" {
-        primary;
-        address 192.168.10.1; 
-        peer address 192.168.10.2; 
-        mclt 1800;
-        split 128;
-    }
-    option routers 192.168.30.254;
-    
-    pool {
-        range 192.168.30.1 192.168.30.253;
-        failover peer "failover";
-    }
-}
-```
-
-If you need to config a static ip with DHCP
-```
-host *hostname {
-    hardware ethernet X:X:X:X:X:X; # MAC ADDRESS
-    fixed-address X.X.X.X 
-}
-```
-
-Restart DHCP server
-```
-systemctl enable isc-dhcp-server
-systemctl restart isc-dhcp-server
-```
-
-
-
-
-
-
-
-
 
 generate the key for the DHCP Updater and for the fail over
 ```
 rndc-confgen -a -b 512 # -a to identify the algorithen and -b for the number of byter 
 ```
-after generating a key copy and paste the key on dhchp.conf and named.conf.local 
+after generating a key copy and paste the key on dhchp.conf and named.conf.local
 
 example of the key generated :
-
 ```
-key "ddns-key" {
+key "<key name >" {    # the key name can be whatever you want 
 algorithm hmac-sha256;
 secret "zDQMycm2qO5ERDdGvhMWtjAWAPd6ZxCG0LE1YOsESW+ZRj9pjR+n2hZ/bqYe2dGh8XdQ+TrMKcKfb18JGOHD2g==";
 }
 ```
 
+DHCP configuration file
+```
+nano dhcpd.conf
+```
+
+
+add the following to the dhcpd.conf to allow failover with dynamic dns: 
+```
+omapi-port 7911;
+omapi-key ddns-key;
+```
+
+
+change from auto to standard to auto update dns 
+```
+ddns-update-style standard;
+```
+
+if you have a static dhcp host configurd add the following to allow the server to give the static ip configute below
+```
+update-static-leases on;
+```
+
+configuration for failover 
 ```
 failover peer "failover" {
     primary;                      #means that is main server
@@ -113,6 +88,46 @@ hardware ethernet <mac address >;
 fixed-address <ip or domain name>;
 }
 ```
+then add the zones for the dynameic dns 
+
+key provaided from the dhcpd.conf documentation for the ddns 
+```
+key DHCP_UPDATER {
+    algorithm HMAC-MD5.SIG-ALG.REG.INT;
+    secret pRP5FapFoJ95JEL06sv4PQ==;
+}
+```
+forwarding zone 
+```
+zone fimatpolska.pl. {
+    primary 192.168.10.254;  #DNS server 
+    key DHCP_UPDATER;            
+}
+```
+reverse zone configuration 
+```
+zone 0.168.192.in-addr.arpa. {
+primary 192.168.10.254;
+key DHCP_UPDATER;
+}
+
+zone 15.168.192.in-addr.arpa. {
+primary 192.168.10.254;
+key DHCP_UPDATER;
+}
+
+zone 0.16.172.in-addr.arpa. {
+primary 192.168.10.254;
+key DHCP_UPDATER;
+}
+
+```
+Restart DHCP server
+```
+systemctl enable isc-dhcp-server
+systemctl restart isc-dhcp-server
+```
+
 
 apt install slapd ldap-utils 
 
