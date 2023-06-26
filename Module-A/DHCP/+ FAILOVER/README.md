@@ -2,6 +2,23 @@
 
 ### Step 1: Configure Primary DHCP Server
 
+- Generate the key for the DHCP Failover
+
+````
+rndc-confgen -a -b 512 # -a to identify the algorithen and -b for the number of byter 
+````
+
+After generating a key copy and paste the key on ``dhchp.conf`` and ``named.conf.local``.
+
+- Example of the key generated :
+
+````
+key "ddns-key" {
+algorithm hmac-sha256;
+secret "zDQMycm2qO5ERDdGvhMWtjAWAPd6ZxCG0LE1YOsESW+ZRj9pjR+n2hZ/bqYe2dGh8XdQ+TrMKcKfb18JGOHD2g==";
+}
+````
+
 - Edit the DHCP server configuration file on the primary node:
 
 ```
@@ -31,6 +48,17 @@ failover peer "dhcp-failover" {
 
 ### Step 2: Configure Secondary DHCP Server
 
+After generating a key copy and paste the key on ``dhchp.conf`` and ``named.conf.local``.
+
+- Example of the key generated :
+
+````
+key "ddns-key" {
+algorithm hmac-sha256;
+secret "zDQMycm2qO5ERDdGvhMWtjAWAPd6ZxCG0LE1YOsESW+ZRj9pjR+n2hZ/bqYe2dGh8XdQ+TrMKcKfb18JGOHD2g==";
+}
+````
+
 - Edit the DHCP server configuration file on the secondary node:
 
 ```
@@ -52,7 +80,6 @@ failover peer "dhcp-failover" {
     max-unacked-updates 10;  # Maximum number of unacknowledged updates
     load balance max seconds 3;  # Maximum load balance interval
     mclt 1800;  # Maximum client lead time
-    split 128;  # Percentage split for load balancing
 }
 ```
 
