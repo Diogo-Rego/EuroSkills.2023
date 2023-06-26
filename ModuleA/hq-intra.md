@@ -53,6 +53,67 @@ systemctl restart isc-dhcp-server
 
 
 
+
+
+
+
+
+generate the key for the DHCP Updater and for the fail over
+```
+rndc-confgen -a -b 512 # -a to identify the algorithen and -b for the number of byter 
+```
+after generating a key copy and paste the key on dhchp.conf and named.conf.local 
+
+example of the key generated :
+
+```
+key "ddns-key" {
+algorithm hmac-sha256;
+secret "zDQMycm2qO5ERDdGvhMWtjAWAPd6ZxCG0LE1YOsESW+ZRj9pjR+n2hZ/bqYe2dGh8XdQ+TrMKcKfb18JGOHD2g==";
+}
+```
+
+```
+failover peer "failover" {
+    primary;                      #means that is main server
+    address 192.168.0.1;          #local ip
+    peer address 192.168.0.2;     #ip the the secondary failover server
+    port 519;                     #local port for failover
+    peer port 520;                #port to use to connec
+    mclt 1800;                    #Dont know yet
+    split 128;                    #Dont know yet
+    load balance max seconds 3;   #Dont know yet
+    max-response-delay 60;        #Dont know yet
+    max-unacked-updates 10;       #Dont know yet
+}
+```
+the configuration for the subnets for the dhcp 
+```
+subnet 192.168.10.0 netmask 255.255.255.0 {
+    option routers 192.168.10.254;
+    option broadcast-address 192.168.10.255;
+    pool {
+        failover peer "failover";
+        range 192.168.10.1 192.168.10.252;
+    }
+}
+subnet 192.168.30.0 netmask 255.255.255.0 {
+    option routers 192.168.30.254;
+    option broadcast-address 192.168.30.255;
+    pool {
+        failover peer "failover";
+        range 192.168.30.1 192.168.30.252;  
+    }
+}
+```
+if you need to config 
+```
+host  <hosname of the machine>{
+hardware ethernet <mac address >;
+fixed-address <ip or domain name>;
+}
+```
+
 apt install slapd ldap-utils 
 
 nano /etc/ldap/ldap.conf
@@ -70,3 +131,5 @@ dpkg-reconfigure slapd
 <MDB>
 <no>
 <yes>
+
+
