@@ -52,3 +52,12 @@ Restart DHCP server
 systemctl enable isc-dhcp-server
 systemctl restart isc-dhcp-server
 ```
+
+## RAID 5 
+
+```
+apt install mdadm
+```
+
+
+
