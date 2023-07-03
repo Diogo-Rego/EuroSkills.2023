@@ -19,6 +19,7 @@ local7.* /var/log/dhcp.log
 
 ````
 if $programname == 'dhcpd' then /var/log/dhcp.log
+& stop
 ````
 
 This line tells rsyslog to redirect logs from the ``dhcpd`` program to ``/var/log/dhcp.log``.
