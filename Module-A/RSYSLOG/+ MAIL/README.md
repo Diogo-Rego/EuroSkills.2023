@@ -1,8 +1,8 @@
 <p align="center">
   <a href="">
-    <img src="../img/rsyslog+ssl.png" alt="RSYSLOG + MAIL" width="160" height="160">
+    <img src="../img/rsyslog+mail.png" alt="RSYSLOG + MAIL" width="160" height="160">
   </a>
-  <h1 align="center">APACHE2 + SSL</h1>
+  <h1 align="center">RSYSLOG + MAIL</h1>
 </p>
 
 ### Step 1: Open the rsyslog configuration file
