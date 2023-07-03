@@ -29,7 +29,9 @@ input(type="imtcp" port="514")
 
 - Save the configuration file.
 
-### Step 2: Restart rsyslog service: Restart the rsyslog service to apply the changes. The command to restart the service varies depending on your Linux distribution. On Ubuntu, you can use
+### Step 2: Restart rsyslog service
+
+- Restart the rsyslog service to apply the changes. The command to restart the service varies depending on your Linux distribution. On Ubuntu, you can use
 
 ````
 sudo service rsyslog restart
