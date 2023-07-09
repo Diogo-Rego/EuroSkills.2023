@@ -1,0 +1,8 @@
+diskpart
+list disk
+select disk <disk_number>
+attributes disk clear readonly
+clean
+create partition primary
+format fs=ntfs quick
+assign mount="C:\Files"
