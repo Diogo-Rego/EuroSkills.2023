@@ -12,7 +12,7 @@ key DHCP_UPDATER {
 ````
 
 - Zones configuration
-- 
+
 ````
 zone fimatpolska.pl. {
     primary 192.168.10.254;  #DNS server 
