@@ -11,10 +11,8 @@
 ### Step 3: Click on the Next button. You will be asked to select the installation type as shown below:
 
 ![img_2.png](img_2.png)
-<p align="center">Choose a role-based or feature-based installation</p>
 
 ![img_3.png](img_3.png)
-<p align="center">Choose the first option: Select a server from the server pool — you should see a single server auto selected and click 'Next'</p>
 
 ![img_4.png](img_4.png)
 
