@@ -1,0 +1,4 @@
+New-SmbShare -Name dfs -Path C:\Files\ -ReadAccess 'Everyone'
+
+
+
