@@ -1,0 +1,49 @@
+---
+- name: ftp
+  hosts: web2
+  become: true
+  vars:
+    ansible_ssh_pass: Passw0rd
+  tasks:
+#-------------------------------------------------------------#
+    - name: Install FTP server
+      apt:
+        name: vsftpd
+        state: present
+#-------------------------------------------------------------#
+    - name: Start and enable FTP server service
+      systemd:
+        name: vsftpd
+        state: started
+        enabled: yes
+#-------------------------------------------------------------#
+    - name: Copy FTP server configuration file
+      template:
+        src: vsftpd.conf
+        dest: /etc/vsftpd.conf
+        owner: root
+        group: root
+        mode: "0644"
+#-------------------------------------------------------------#
+    - name: Start and enable FTP server service
+      systemd:
+        name: vsftpd
+        state: stopped
+        enabled: no
+#-------------------------------------------------------------#
+    - name: copy ftp.enta.pt.crt from localhost
+      copy:
+        src: "/Users/bosserman/Downloads/ftp.enta.pt.crt"
+        dest: "/etc/ssl/certs/"
+#-------------------------------------------------------------#
+    - name: copy ftp.enta.pt.key from localhost
+      copy:
+        src: "/Users/bosserman/Downloads/ftp.enta.pt.key"
+        dest: "/etc/ssl/private/"
+#-------------------------------------------------------------#
+    - name: Start and enable FTP server service
+      systemd:
+        name: vsftpd
+        state: started
+        enabled: yes
+#-------------------------------------------------------------#

@@ -1,0 +1,15 @@
+- name: Change hostname
+  hosts: <name of the host or the group of hosts>
+  gather_facts: false
+  become: true
+  tasks:
+#-------------------------------------------------------------#
+    - name: Change hostname
+      hostname:
+        name: "{{ <name of the variable> }}"
+      register: result
+#-------------------------------------------------------------#
+    - name: Set timezone to Europe/Warsaw
+      timezone:
+        name: Europe/Warsaw
+#-------------------------------------------------------------#
