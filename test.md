@@ -1,7 +1,14 @@
-<kbd> <br> [Title][Link] <br> </kbd>
+
+<br>
+<br>
+
+## Link Outside
+
+*The whole button is clickable,* <br>
+*but doesn't have any color.*
 
 <br>
 
-[<kbd> <br> Teste <br> </kbd>][www.google.pt]
+[<kbd> <br> Title <br> </kbd>][Link]
 
 <br>
