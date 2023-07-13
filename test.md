@@ -1,1 +1,3 @@
-[![Test]][www.google.com]
+[![Badge License]][License]
+
+[Badge License]: www.google.com
