@@ -44,3 +44,6 @@ format fs=ntfs quick
 assign letter=S
 ```
 if you want to change the letter of the disk and it is formated you need to select the volume to change the letter no the disk 
+
+
+Enable-PSRemoting
