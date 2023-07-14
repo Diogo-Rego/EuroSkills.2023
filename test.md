@@ -7,5 +7,5 @@
 
 
 <a href="[https://example.com/button-link](https://www.google.com)" style="display: inline-block;">
-  <img src="./Module-A/img/EasyRSA.png" alt="Button Text" width="200" height="50" style="width: 200px; height: 50px;">
+  <img src="./Module-A/img/EasyRSA.png" alt="Button Text" width="50" height="50">
 </a>
