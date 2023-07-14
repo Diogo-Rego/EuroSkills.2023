@@ -3,6 +3,7 @@
   hosts: web2
   become: true
   vars:
+    ansible_inventory: "hosts.ini"
     ansible_ssh_pass: Passw0rd
   tasks:
 #-------------------------------------------------------------#
