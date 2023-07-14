@@ -1,7 +1,7 @@
 # ANSIBLE
 
 Install ansible to allow you to run the playbooks
-```markdown
+```
 apt install ansible 
 ```
 Create a directory to store all of you ansible scripts
