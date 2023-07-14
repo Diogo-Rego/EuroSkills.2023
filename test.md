@@ -1,6 +1,4 @@
 ```markdown
 [Link]: # 'Link with example title.'
 ```
-```markdown
-[aaaa]: # 'aaa'
-```
+[![Button Text](https://example.com/button-image.png)](https://example.com/button-link)
