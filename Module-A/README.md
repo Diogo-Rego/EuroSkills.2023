@@ -11,9 +11,7 @@ The competition has a fixed start and finish time. You must decide how to best d
 
 **Please carefully read the following instructions!**
 
-When the competition time ends, please leave your station in a running state. The assessment will be
-done in the state as it is. **No reboot will be initiated as well as powered off machines will not
-be powered on!**
+When the competition time ends, please leave your station in a running state. The assessment will be done in the state as it is. **No reboot will be initiated as well as powered off machines will not be powered on!**
 
 Please use the information below for all the servers and clients.
 
@@ -55,43 +53,33 @@ Use the string Passw0rd! as password everywhere where a password, passphrase etc
 
 # RESOURCES
 
-> You will find the topology and the listing of used IP addresses at the end of this document. The list of
-the users to be created can be found there too.
+> You will find the topology and the listing of used IP addresses at the end of this document. The list of the users to be created can be found there too.
 
 # PREINSTALLED RESOURCES
 
-> Every system in this task uses **Debian 11**. Every VM you see in the topology chart at the end of this
-document is preinstalled on the physical host, named accordingly. The hosts use VMware ESXi as a
-virtualisation platform and you can connect to the resources using your laptops with vSphere Web
-Client or VMware Workstation also.
+> Every system in this task uses **Debian 11**. Every VM you see in the topology chart at the end of this document is preinstalled on the physical host, named accordingly. The hosts use VMware ESXi as a virtualisation platform and you can connect to the resources using your laptops with vSphere Web Client or VMware Workstation also.
 
 **You can connect to the ESXi host with esxi.local URL.**
 
-> The preinstalled VMs contain only the base system and few additional packages (see in the software
-section), you can install additional software using virtual optical disks.
+> The preinstalled VMs contain only the base system and few additional packages (see in the software section), you can install additional software using virtual optical disks.
 
 # SOFTWARE
 
 > For testing purpose, all VM has been installed with the following test tools: 
 
 ```
-smbclient, curl, lynx, dnsutils, ldap-utils, ftp, lftp, wget, ssh, nfs-common, rsync, telnet, traceroute, tcptraceroute,
-tcpdump, net-tools, cifs-utils.
+smbclient, curl, lynx, dnsutils, ldap-utils, ftp, lftp, wget, ssh, nfs-common, rsync, telnet, traceroute, tcptraceroute, tcpdump, net-tools, cifs-utils.
 ```
 
 **You can find a Debian install ISOs in the datastore.**
 
 # INDRUSTY COMPLIANCE
 
-> The test project does not always give you an exact specification. In these situations you have the
-chance to choose which software to use, which path to follow - you will find information at the tasks
-about the paths you can choose from. The more sophisticated a solution is the better mark you are
-going to get for it.
+> The test project does not always give you an exact specification. In these situations you have the chance to choose which software to use, which path to follow - you will find information at the tasks about the paths you can choose from. The more sophisticated a solution is the better mark you are going to get for it.
 
 # DESCRIPTION OF PROJECT AND TASKS
 
-> You are a new IT Engineer of the Firma Tradycyjna Polska Sp. z o.o. company. The goal of your next
-project is to build the whole IT infrastructure of the company.
+> You are a new IT Engineer of the Firma Tradycyjna Polska Sp. z o.o. company. The goal of your next project is to build the whole IT infrastructure of the company.
 
 # General Configuration
 
@@ -109,19 +97,17 @@ This is the company’s headquarters site with limited server services and clien
 
 **fw-hq**
 
-> This is the edge router and firewall of the HQ site. For this reason, it should allow devices to reach
-each other between network segments and the Internet.
+> This is the edge router and firewall of the HQ site. For this reason, it should allow devices to reach each other between network segments and the Internet.
 
 You must configure the services of this server according to the following requirements.
 
-1. **Create a root certificate authority**. Use the next parameters:
+1. **Create a root certificate authority** ([Easy-RSA](test.md)). Use the next parameters:
 
 ````
 C=PL, O=Firma Tradycyjna Polska Sp. z o.o., CN=Firma Tradycyjna Polska Sp. z o.o. Root CA
 ````
 
-Place all related files in the /ca folder. Use CA.crt for the name of CA certificate file. Issued
-certificates should contain (only and exactly) the following fields:
+Place all related files in the /ca folder. Use CA.crt for the name of CA certificate file. Issued certificates should contain (only and exactly) the following fields:
 
 ````
 C=PL, O=Firma Tradycyjna Polska Sp. z o.o., CN=<FQDN>
@@ -129,15 +115,13 @@ C=PL, O=Firma Tradycyjna Polska Sp. z o.o., CN=<FQDN>
 
 Make sure all servers and the client applications used accept the certs issued by this CA.
 
+2. **Make sure, the public services (DNS, mail, web) of the HQ site can accessible from the internet**([NAT](test.md)). Configure [firewall](test.md) with iptables. Incoming packets should be dropped by default. Allow minimal traffic for the services to work. Allow SSH traffic from everywhere. Make sure, that iptables persist across reboots.
+
+3. **Ensure secure channel between the HQ and the datacentre sites** ([Site-to-Site VPN](test.md)). If this cannel broke, the clients of the HQ site can access the public services of the datacentre.
+
+4. **Configure a [remote access VPN](test.md) service for a remote workers**. Make sure, VPN clients can access to the same resources as the clients of the HQ site.
 
 
-  - [Easy-RSA](www.google.com)
-  - [Firewall](www.google.com)
-  - [NAT](www.google.com)
-  - [VPN (Site-to-Site)](www.google.com)
-  - [VPN (Remote Access)](www.google.com)
- 
- 
 
 - hq-intra
   - [a](a)
