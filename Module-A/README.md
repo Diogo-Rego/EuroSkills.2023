@@ -95,7 +95,7 @@ Set up all the resources with the following:
 
 This is the company’s headquarters site with limited server services and clients.
 
-**fw-hq**
+### fw-hq
 
 > This is the edge router and firewall of the HQ site. For this reason, it should allow devices to reach each other between network segments and the Internet.
 
@@ -115,7 +115,7 @@ C=PL, O=Firma Tradycyjna Polska Sp. z o.o., CN=<FQDN>
 
 Make sure all servers and the client applications used accept the certs issued by this CA.
 
-2. **Make sure, the public services (DNS, mail, web) of the HQ site can accessible from the internet**([NAT](test.md)). Configure [firewall](test.md) with iptables. Incoming packets should be dropped by default. Allow minimal traffic for the services to work. Allow SSH traffic from everywhere. Make sure, that iptables persist across reboots.
+2. **Make sure, the public services (DNS, mail, web) of the HQ site can accessible from the internet** ([NAT](test.md)). Configure [firewall](test.md) with iptables. Incoming packets should be dropped by default. Allow minimal traffic for the services to work. Allow SSH traffic from everywhere. Make sure, that iptables persist across reboots.
 
 3. **Ensure secure channel between the HQ and the datacentre sites** ([Site-to-Site VPN](test.md)). If this cannel broke, the clients of the HQ site can access the public services of the datacentre.
 
@@ -123,18 +123,34 @@ Make sure all servers and the client applications used accept the certs issued b
 
 
 
-- hq-intra
-  - [a](a)
-  - [a](a)
-  - [a](a)
-  - [a](a)
-  - [a](a)
-- hq-noc
-  - [a](a)
-  - [a](a)
-  - [a](a)
-  - [a](a)
-  - [a](a)
+### hq-intra
+
+1. **Deploy a directory service** with [LDAP protocol](test.md). Create all objects listed in Appendix B.
+
+2. **Create a [failover DHCP cluster](test.md) with hq-noc for the client network of HQ site**. HQ client subnet uses [DDNS](test.md) so make sure that all A and PTR records are dynamically updated.
+
+### hq-noc
+
+1. Add 4 new 2GB HDD to a machine. **Configure software-based [RAID 5](test.md)** array and mount this to /share path.
+
+2. **Configure [CIFS](test.md) service** for the profile directory of the corporate users. Use the /share/users/<username> as the path of the profile directories.
+
+3. **Create a [failover DHCP cluster](test.md) with hq-intra**. See details there.
+
+4. **Create monitoring service with [Cacti](test.md)**. Monitor the CPU, memory and disk usage of all servers on the HQ site with [SNMP](test.md). Send email alert to the admin@firmatpolska.pl if the memory usage of any server more then 80%.
+
+5. **Configure [syslog](test.md) server** to collect logfiles from the servers of the HQ site.
+
+   - Logs coming from hq-intra related to ``DHCP`` should be written to ``/log/dhcp.log``
+   - 
+   - Logs coming from dmz-host related to ``e-mail`` should be written to ``/log/mail.log``
+   - 
+   - ``All other incoming logs`` from the HQ site should be written to ``/log/dump.log``
+
+
+
+
+
 - dmz-host
   - [a](a)
   - [a](a)
