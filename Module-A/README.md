@@ -1,6 +1,6 @@
 <p align="center">
   <a href="">
-    <img src="../img/Linux_Environment.png" alt="Linux_Environment.png" width="160" height="160">
+    <img src="../img/banner.png" alt="Linux_Environment.png" width="160" height="160">
   </a>
   <h1 align="center">Module A – Linux Environment</h1>
   <h3 align="center">ICT Specialists (39)</h3>
