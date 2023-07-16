@@ -98,7 +98,10 @@ project is to build the whole IT infrastructure of the company.
 Set up all the resources with the following:
 
 - [hostname,](test.md)
-
+- [network configuration,](test.md)
+- [time zone,](test.md)
+- [keyboard layout,](test.md)
+- [install SSH server and allow root password access](test.md) (for the easiest testing).
 
 #### Corporate HQ
 
