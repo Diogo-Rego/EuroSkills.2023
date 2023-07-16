@@ -103,14 +103,42 @@ Set up all the resources with the following:
 - [keyboard layout,](test.md)
 - [install SSH server and allow root password access](test.md) (for the easiest testing).
 
-#### Corporate HQ
+# Corporate HQ
 
-- fw-hq
+This is the company’s headquarters site with limited server services and clients.
+
+**fw-hq**
+
+> This is the edge router and firewall of the HQ site. For this reason, it should allow devices to reach
+each other between network segments and the Internet.
+
+You must configure the services of this server according to the following requirements.
+
+1. **Create a root certificate authority**. Use the next parameters:
+
+````
+C=PL, O=Firma Tradycyjna Polska Sp. z o.o., CN=Firma Tradycyjna Polska Sp. z o.o. Root CA
+````
+
+Place all related files in the /ca folder. Use CA.crt for the name of CA certificate file. Issued
+certificates should contain (only and exactly) the following fields:
+
+````
+C=PL, O=Firma Tradycyjna Polska Sp. z o.o., CN=<FQDN>
+````
+
+Make sure all servers and the client applications used accept the certs issued by this CA.
+
+
+
   - [Easy-RSA](www.google.com)
   - [Firewall](www.google.com)
   - [NAT](www.google.com)
   - [VPN (Site-to-Site)](www.google.com)
   - [VPN (Remote Access)](www.google.com)
+ 
+ 
+
 - hq-intra
   - [a](a)
   - [a](a)
