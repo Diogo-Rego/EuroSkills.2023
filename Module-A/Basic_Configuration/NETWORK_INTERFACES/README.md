@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/Diogo-Rego/EuroSkills.2023/tree/main/Module-A/NETWORK%20INTERFACES%20-%20OK#network-interfaces---ipv4">
-    <img src="../img/wired-network.png" alt="NETWORK INTERFACES - IPV4" width="160" height="160">
+  <a>
+    <img src="../../img/wired-network.png" alt="NETWORK INTERFACES - IPV4" width="160" height="160">
   </a>
   <h1 align="center">NETWORK INTERFACES - IPV4</h1>
 </p>
