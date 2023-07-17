@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/Diogo-Rego/EuroSkills.2023/tree/main/Module-A/EasyRSA#easyrsa">
+  <a>
     <img src="../img/EasyRSA.png" alt="EasyRSA" width="160" height="160">
   </a>
   <h1 align="center">EasyRSA</h1>
