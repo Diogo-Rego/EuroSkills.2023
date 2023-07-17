@@ -1,4 +1,9 @@
-# DHCP
+<p align="center">
+  <a>
+    <img src="../img/dhcp.png" alt="DHCP" width="160" height="160">
+  </a>
+  <h1 align="center">DHCP</h1>
+</p>
 
 ### Step 1: Install the DHCP Server
 

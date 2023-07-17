@@ -1,4 +1,6 @@
-# DHCP + UPDATE
+<p align="center">
+  <h1 align="center">DHCP + UPDATE</h1>
+</p>
 
 - Then add the zones for the dynameic dns.
 

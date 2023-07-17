@@ -1,4 +1,6 @@
-# DHCP + FAILOVER
+<p align="center">
+  <h1 align="center">DHCP + FAILOVER</h1>
+</p>
 
 ### Step 1: Configure Primary DHCP Server
 
