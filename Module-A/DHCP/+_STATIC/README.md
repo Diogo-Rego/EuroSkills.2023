@@ -1,4 +1,6 @@
-# DHCP + STATIC
+<p align="center">
+  <h1 align="center">DHCP + STATIC</h1>
+</p>
 
 ### Step 1: Identify the MAC Address of the Device
 
