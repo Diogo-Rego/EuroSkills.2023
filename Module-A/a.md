@@ -3,7 +3,14 @@
 
 - fw-hq
 
-  - hostname -[]
+<!DOCTYPE html>
+<html>
+<body>
+<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+</body>
+</html>
+
+  - hostname
   - network configuration
   - time zone
   - keyboard layout
