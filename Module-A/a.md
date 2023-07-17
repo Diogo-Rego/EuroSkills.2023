@@ -3,7 +3,7 @@
 
 - fw-hq
 
-  - hostname
+  - <sub><input type="checkbox"/></sub> hostname
   - network configuration
   - time zone
   - keyboard layout
