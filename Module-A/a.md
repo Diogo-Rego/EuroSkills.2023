@@ -2,7 +2,10 @@
 ### Corporate HQ
 
 - fw-hq
-<input type="checkbox" disabled checked />
+  
+<input type="checkbox"/>
+
+
   - hostname
   - network configuration
   - time zone
