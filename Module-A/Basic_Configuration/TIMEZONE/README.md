@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/Diogo-Rego/EuroSkills.2023/tree/main/Module-A/TIMEZONE%20-%20OK#configuration-the-timezone">
-    <img src="../img/time-zone.png" alt="TIMEZONE" width="160" height="160">
+  <a>
+    <img src="../../img/time-zone.png" alt="TIMEZONE" width="160" height="160">
   </a>
   <h1 align="center">Configuration the TimeZone</h1>
 </p>
