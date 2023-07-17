@@ -9,6 +9,9 @@
  - Install LDAP 
 ````
 apt install ldap-utils slapd
+
+
+apt install libnss-ldap libpam-ldap
 ````
 
  - You get prompted to set up your administrator password. Enter a new password and then confirm the password.
@@ -34,7 +37,7 @@ URI      ldap://ldap.example.com ldap://ldap-master.example.com:666
 ````
 slappasswd
 ````
-{SSHA}5iOP3z134vDVnBEHzBC1BV6cEg2jFAT/
+{SSHA}04LMaQWmKy5WXDySz/cVk28q5iP5DEAY
  - Create a rootpw.ldif file
 ````
 nano rootpw.ldif
@@ -47,10 +50,6 @@ changetype: modify
 add: olcRootPW
 olcRootPW: {SSHA}yh/GrT7AsObYUoHu89ynjzOljpBP10sp
 ````
-
-
-
-
 
 Replace the {SSHA}yh/GrT7AsObYUoHu89ynjzOljpBP10sp with the hash that you obtained in the slappasswd command.
 

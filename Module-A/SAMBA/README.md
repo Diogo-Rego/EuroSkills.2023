@@ -74,3 +74,10 @@ sudo service smbd restart
 Once the Samba server is configured and running, other devices on the network should be able to access the shared folder using the server's IP address or hostname. In a file explorer or file manager, you can enter \\your_server_ip or \\your_server_hostname in the address bar to access the shared folder.
 
 Note: Make sure your firewall settings allow Samba traffic if you have a firewall enabled on your Linux system.
+
+
+ldap suffix = dc=example,dc=com
+ldap user suffix = ou=Users
+ldap group suffix = ou=Groups
+ldap machine suffix = ou=Computers
+ldap admin dn = cn=admin,dc=example,dc=com
