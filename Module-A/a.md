@@ -3,7 +3,7 @@
 
 - fw-hq
 
-  - hostname
+  - hostname -[]
   - network configuration
   - time zone
   - keyboard layout
