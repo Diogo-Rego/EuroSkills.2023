@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="./README.md">
+  <a>
     <img src="img/Linux_Environment.png" alt="Linux Environment" width="160" height="160">
   </a>
   <h1 align="center">Module A – Linux Environment</h1>
@@ -85,11 +85,11 @@ smbclient, curl, lynx, dnsutils, ldap-utils, ftp, lftp, wget, ssh, nfs-common, r
 
 Set up all the resources with the following:
 
-- [hostname,](test.md)
-- [network configuration,](test.md)
-- [time zone,](test.md)
-- [keyboard layout,](test.md)
-- [install SSH server and allow root password access](test.md) (for the easiest testing).
+- [hostname,](Basic_Configuration/HOSTNAME/README.md)
+- [network configuration,](Basic_Configuration/NETWORK_INTERFACES/README.md)
+- [time zone,](Basic_Configuration/TIMEZONE/README.md)
+- [keyboard layout,](Basic_Configuration/Keyboard_Layout/README.md)
+- [install SSH server and allow root password access](Basic_Configuration/SSH/README.md) (for the easiest testing).
 
 # Corporate HQ
 
@@ -101,7 +101,7 @@ This is the company’s headquarters site with limited server services and clien
 
 You must configure the services of this server according to the following requirements.
 
-1. **Create a root certificate authority** ([Easy-RSA](test.md)). Use the next parameters:
+1. **Create a root certificate authority** ([Easy-RSA](EasyRSA/README.md)). Use the next parameters:
 
 ````
 C=PL, O=Firma Tradycyjna Polska Sp. z o.o., CN=Firma Tradycyjna Polska Sp. z o.o. Root CA
@@ -115,7 +115,7 @@ C=PL, O=Firma Tradycyjna Polska Sp. z o.o., CN=<FQDN>
 
 Make sure all servers and the client applications used accept the certs issued by this CA.
 
-2. **Make sure, the public services (DNS, mail, web) of the HQ site can accessible from the internet** ([NAT](test.md)). Configure [firewall](test.md) with iptables. Incoming packets should be dropped by default. Allow minimal traffic for the services to work. Allow SSH traffic from everywhere. Make sure, that iptables persist across reboots.
+2. **Make sure, the public services (DNS, mail, web) of the HQ site can accessible from the internet** ([NAT](IPTABLES/NAT/README.md)). Configure [firewall](IPTABLES/FIREWALL/README.md) with iptables. Incoming packets should be dropped by default. Allow minimal traffic for the services to work. Allow SSH traffic from everywhere. Make sure, that iptables persist across reboots.
 
 3. **Ensure secure channel between the HQ and the datacentre sites** ([Site-to-Site VPN](test.md)). If this cannel broke, the clients of the HQ site can access the public services of the datacentre.
 
@@ -147,22 +147,38 @@ Make sure all servers and the client applications used accept the certs issued b
    - 
    - ``All other incoming logs`` from the HQ site should be written to ``/log/dump.log``
 
+### dmz-host
+
+1. **Deploy a [DNS](test.md) server of the ``firmatpolska.pl`` domain**. Serves the reverse records of the HQ networks also.
+   
+    This server needs to reply to DNS requests from the other sites and from the Internet also, but not allow to serve a private IPs outside of HQ site. Create entries for all servers (both sites) and services.
+
+2. **Configure [DDNS](test.md) for HQ client network.**
+
+3. **Install and configure [web service](test.md)**. Serve the ``https://internal.firmatpolska.pl``. Use client certificate authentication. Only the users with a valid certificate signed by the company’s CA can access to this site.
+
+4. **Configure [e-mail](test.md) service** to send and receive email for the firmatpolska.pl domain. Users access their mailboxes using TLS-secured IMAP (port 143) and send emails using STARTTLS secured SMTP (port 587). No unencrypted traffic from mailer clients are allowed. Both services require authentication. Port 25 is only used to accept mails from other SMTP servers (both encrypted and unencrypted)
+
+### hq-clt01
+
+1. Install a **[graphic environment](test.md)** of your choice.
+
+2. **Configure [LDAP authentication](test.md)** using the LDAP server and make the CIFS-shared home folder of the logged in user available.
+
+    Prevent user to use local user account to login to the system except root and LDAP users.
+
+    The LDAP users which is logged in previously to this machine, can log in also when the LDAP server is not available.
+
+3. **Install Thunderbird** e-mail client to use with admin@firmatpolska.pl. Send an e-mail message to maja.
 
 
 
 
-- dmz-host
-  - [a](a)
-  - [a](a)
-  - [a](a)
-  - [a](a)
-  - [a](a)
-- hq-clt01
-  - [a](a)
-  - [a](a)
-  - [a](a)
-  - [a](a)
-  - [a](a)
+
+
+
+
+
 
 #### Data Center
 
