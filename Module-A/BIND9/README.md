@@ -29,7 +29,8 @@ options {
         8.8.8.8;
         8.8.4.4;
     };
-    dnssec-validation auto;
+    dnssec-validation no;
+    allow-recursion { any; };
     auth-nxdomain no;    # Disable DNSSEC error showing as SERVFAIL
     listen-on-v6 { any; };
 };
