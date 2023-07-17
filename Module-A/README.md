@@ -131,7 +131,7 @@ Make sure all servers and the client applications used accept the certs issued b
 
 ### hq-noc
 
-1. Add 4 new 2GB HDD to a machine. **Configure software-based [RAID 5](test.md)** array and mount this to /share path.
+1. Add 4 new 2GB HDD to a machine. **Configure software-based [RAID 5](RAID_5/README.md)** array and mount this to /share path.
 
 2. **Configure [CIFS](test.md) service** for the profile directory of the corporate users. Use the /share/users/<username> as the path of the profile directories.
 
@@ -142,9 +142,9 @@ Make sure all servers and the client applications used accept the certs issued b
 5. **Configure [syslog](test.md) server** to collect logfiles from the servers of the HQ site.
 
    - Logs coming from hq-intra related to ``DHCP`` should be written to ``/log/dhcp.log``
-   - 
+
    - Logs coming from dmz-host related to ``e-mail`` should be written to ``/log/mail.log``
-   - 
+
    - ``All other incoming logs`` from the HQ site should be written to ``/log/dump.log``
 
 ### dmz-host
@@ -183,7 +183,7 @@ Make sure all servers and the client applications used accept the certs issued b
 #### Data Center
 
 - fw-sddc
-- laac-mgmt
+- iaac-mgmt
 - bck-srv01..n
 - frt-web01..n
 
