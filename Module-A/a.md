@@ -3,7 +3,8 @@
 
 - fw-hq
   
-<input type="checkbox"/>
+<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+<label for="vehicle1"> I have a bike</label><br>
 
 
   - hostname
