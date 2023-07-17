@@ -117,17 +117,17 @@ Make sure all servers and the client applications used accept the certs issued b
 
 2. **Make sure, the public services (DNS, mail, web) of the HQ site can accessible from the internet** ([NAT](IPTABLES/NAT/README.md)). Configure [firewall](IPTABLES/FIREWALL/README.md) with iptables. Incoming packets should be dropped by default. Allow minimal traffic for the services to work. Allow SSH traffic from everywhere. Make sure, that iptables persist across reboots.
 
-3. **Ensure secure channel between the HQ and the datacentre sites** ([Site-to-Site VPN](test.md)). If this cannel broke, the clients of the HQ site can access the public services of the datacentre.
+3. **Ensure secure channel between the HQ and the datacentre sites** ([Site-to-Site VPN](VPN/Site-to-Site/README.md)). If this cannel broke, the clients of the HQ site can access the public services of the datacentre.
 
-4. **Configure a [remote access VPN](test.md) service for a remote workers**. Make sure, VPN clients can access to the same resources as the clients of the HQ site.
+4. **Configure a [remote access VPN](VPN/Remote_Access/README.md) service for a remote workers**. Make sure, VPN clients can access to the same resources as the clients of the HQ site.
 
 
 
 ### hq-intra
 
-1. **Deploy a directory service** with [LDAP protocol](test.md). Create all objects listed in Appendix B.
+1. **Deploy a directory service** with [LDAP protocol](LDAP/README.md). Create all objects listed in Appendix B.
 
-2. **Create a [failover DHCP cluster](test.md) with hq-noc for the client network of HQ site**. HQ client subnet uses [DDNS](test.md) so make sure that all A and PTR records are dynamically updated.
+   2. **Create a [failover DHCP cluster](DHCP/README.md) with hq-noc for the client network of HQ site**. HQ client subnet uses [DDNS](DHCP/+_UPDATE/README.md) so make sure that all A and PTR records are dynamically updated.
 
 ### hq-noc
 
