@@ -2,8 +2,8 @@
 ### Corporate HQ
 
 - fw-hq
-
-  - <sub><input type="checkbox"/></sub> hostname
+<sub><input type="checkbox"/></sub>
+  - hostname
   - network configuration
   - time zone
   - keyboard layout
