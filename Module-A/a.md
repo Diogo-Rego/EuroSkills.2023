@@ -3,7 +3,7 @@
 
 - fw-hq
 
-  - <sub><input type="checkbox"/></sub> hostname
+  - hostname
   - network configuration
   - time zone
   - keyboard layout
@@ -80,7 +80,7 @@
 
 - iaac-mgmt
 
-  - [ ] hostname
+  - hostname
   - network configuration
   - time zone
   - keyboard layout
