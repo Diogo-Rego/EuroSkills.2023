@@ -125,7 +125,7 @@ Make sure all servers and the client applications used accept the certs issued b
 
 ### hq-intra
 
-1. **Deploy a directory service** with [LDAP protocol](LDAP/README.md). Create all objects listed in Appendix B.
+1. **Deploy a directory service** with [LDAP protocol](LDAP/README.md.bak). Create all objects listed in Appendix B.
 
    2. **Create a [failover DHCP cluster](DHCP/README.md) with hq-noc for the client network of HQ site**. HQ client subnet uses [DDNS](DHCP/+_UPDATE/README.md) so make sure that all A and PTR records are dynamically updated.
 
