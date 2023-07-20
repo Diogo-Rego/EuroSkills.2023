@@ -1,83 +1,65 @@
-# SAMBA
+## SAMBA + LDAP
 
-Install Samba:
-
+### -SRV 
 ````
-sudo apt install samba
-````
-
-Configure Samba:
-
-- Open the Samba configuration file using a text editor. For example:
-
-````
-sudo nano /etc/samba/smb.conf
+apt-get install samba smbldap-tools
 ````
 
-Find the [global] section in the configuration file. You can modify or add the following parameters according to your needs:
-
-- Set the workgroup (optional):
-
 ````
-workgroup = WORKGROUP
+mkdir /etc/ldap/schema/
 ````
-
-- Set the NetBIOS name (optional):
-
 ````
-netbios name = YOUR_SERVER_NAME
+cp /usr/share/doc/samba/examples/LDAP/samba.schema /etc/ldap/schema
 ````
 
-- Set the server string (optional):
-
 ````
-server string = Samba Server
+nano /etc/samba/smb.conf
 ````
-
-- Set the security mode:
-
 ````
-security = user
+[global]
+   passdb backend = ldapsam:ldap://X.X.X.X
+   ldap suffix = dc=example,dc=com
+   ldap user suffix = ou=example
+   ldap group suffix = ou=example
+   ldap admin dn = cn=admin,dc=example,dc=com
+   include /etc/ldap/schema/samba.schema
 ````
-
-- Configure shared directories:
-
+````
+smbpasswd –w user1 
+smbpasswd -a user1 
+````
+````
+nano /etc/samba/smb.conf
+````
 ````
 [share]
-path = /path/to/shared/folder
-writeable = yes
-guest ok = yes
-create mask = 0755
-directory mask = 0755
+   path = /local_folder
+   browseable = yes/no
+   security = @group/user
+   writeable = yes/no
+   read only = yes/no
+   inherit permissions = yes/no
+   inherit owner = yes/no
+````
+````
+Chmod -R 1777 /local_folder
+chown *user /local_folder
+````
+````
+systemctl restart smbd
+systemctl enable smbd
 ````
 
-Replace /path/to/shared/folder with the actual path to the folder you want to share. Adjust the permissions (create mask and directory mask) as needed.
-
-Save the configuration file (Ctrl+O in nano) and exit the text editor (Ctrl+X).
-
-Add Samba users:
-
-- Create Samba users and set their passwords using the smbpasswd command. For example:
-
+### -CLI
 ````
-sudo smbpasswd -a username
+apt-get install smbclient cifs-utils
 ````
-
-Replace username with the desired username.
-
-Restart the Samba service:
-
 ````
-sudo service smbd restart
+smbclient //X.X.X.X/[share_name] -U *(user)
 ````
-
-Once the Samba server is configured and running, other devices on the network should be able to access the shared folder using the server's IP address or hostname. In a file explorer or file manager, you can enter \\your_server_ip or \\your_server_hostname in the address bar to access the shared folder.
-
-Note: Make sure your firewall settings allow Samba traffic if you have a firewall enabled on your Linux system.
-
-
-ldap suffix = dc=example,dc=com
-ldap user suffix = ou=Users
-ldap group suffix = ou=Groups
-ldap machine suffix = ou=Computers
-ldap admin dn = cn=admin,dc=example,dc=com
+````
+nano /etc/fstab
+````
+````
+//X.X.X.X/SHARE_NAME	/LOCAL_FOLDER	CIFS	username=*,password=* 0 0 defaults 
+````
