@@ -1,8 +1,42 @@
-Get-Service RemoteAccess
-
-Start-Service RemoteAccess
-
+to allow dk-srv1 to add the core to the failover cluster
+````
 Start-Service RemoteRegistry
+Set-Service -Name RemoteRegistry -StartupType Automatic
+````
+
+sconfig
+7
+e
+2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+not working for some reason 
+````
+Get-Service RemoteAccess
+Start-Service RemoteAccess
+````
+
+
+
+
+
+
 
 Start-Service RpcSs
 
@@ -10,7 +44,6 @@ Start-Service RpcEptMapper
 
 Set-Service -Name WinRM -StartupType Automatic
 
-Set-Service -Name RemoteRegistry -StartupType Automatic
 
 Set-Item WSMan:\localhost\Service\AllowRemoteConnection -Value $true
 
@@ -34,6 +67,11 @@ netsh int ipv4 set dynamicport udp start=49152 num=16384
 Restart the Firewall Service: After making changes to the firewall rules, it's a good practice to restart the Windows Firewall service to apply the changes:
 
 Restart-Service -Name "MpsSvc"
+
+
+
+
+
 
 
 open mmc 
