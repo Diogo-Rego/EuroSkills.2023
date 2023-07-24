@@ -1,0 +1,12 @@
+---
+
+- include_tasks: "1-hostname.yml"
+
+- include_tasks: "2-firewall.yml"
+
+- include_tasks: "3a-backend.yml"
+
+- include_tasks: "3b-backend.yml"
+
+- include_tasks: "4-frontend.yml"
+
