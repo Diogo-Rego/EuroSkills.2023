@@ -18,3 +18,8 @@ Rename-NetAdapter -Name <String> -NewName <String>
 
 Rename-Computer -NewName <String>
 ''''
+
+https://petri.com/add-computer-to-domain-powershell/
+''''
+Add-Computer -DomainName skill39.wse -DomainCredencial SKILL39\Administrator
+''''
