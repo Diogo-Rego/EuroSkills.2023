@@ -1,10 +1,7 @@
 hostname WARSAW
 !
 !
-clock timezone MSK 3 0
-!
-!
-ip domain name ict.pl
+clock timezone GMT 2 0
 !
 !
 key chain EIGRP
@@ -12,23 +9,42 @@ key chain EIGRP
   key-string cisco
 !
 !
+diagnostic bootup level minimal
+spanning-tree extend system-id
+!
+!
+archive
+ path tftp://172.16.40.3/$h
+ write-memory
+!
+!
+memory free low-watermark processor 67180
+!
+!
+redundancy
+ mode none
+!
+!
 interface Loopback0
  ip address 10.99.99.99 255.255.255.255
  ip pim sparse-mode
 !
 !
-interface g2
- ip address 172.20.4.2 255.255.255.252
+interface G2
+ ip address 172.20.3.1 255.255.255.0
  ip nat inside
  ip authentication key-chain eigrp 100 EIGRP
  ip pim sparse-mode
  negotiation auto
 !
-interface g1
+!
+interface G1
  ip address 132.87.2.1 255.255.255.0
  ip nat outside
+ ip access-group SEC in
 !
-interface g3
+!
+interface G3
  ip address 10.0.10.1 255.255.255.252
  ip nat inside
  ip authentication key-chain eigrp 100 EIGRP
@@ -36,7 +52,8 @@ interface g3
  encapsulation ppp
  ppp authentication chap
 !
-interface Serial0/1/1
+!
+interface G4
  ip address 10.0.20.1 255.255.255.252
  ip nat inside
  ip authentication key-chain eigrp 100 EIGRP
@@ -45,21 +62,21 @@ interface Serial0/1/1
  ppp authentication chap
 !
 !
-!
 router eigrp 100
  network 10.0.10.0 0.0.0.3
  network 10.0.20.0 0.0.0.3
- network 10.99.0.0 0.0.0.255
- network 10.99.1.0 0.0.0.255
+-> network 10.99.0.0 0.0.0.255
+-> network 10.99.1.0 0.0.0.255 ## don't know what is this ip is from
  network 10.99.99.99 0.0.0.0
- network 172.20.4.0 0.0.0.3
+ network 172.20.3.0 0.0.0.255
  redistribute static metric 1000000 0 255 1 1500
  passive-interface default
- no passive-interface Tunnel1
- no passive-interface Tunnel2
- no passive-interface GigabitEthernet0/0/0
- no passive-interface Serial0/1/0
- no passive-interface Serial0/1/1
+-> no passive-interface Tunnel1
+-> no passive-interface Tunnel2
+ no passive-interface G2
+ no passive-interface G3
+ no passive-interface G4
+!
 !
 router bgp 65001
  bgp log-neighbor-changes
@@ -88,38 +105,11 @@ ip access-list standard ACL_FOR_NAT
  permit 10.0.0.0 0.255.255.255
  permit 192.168.0.0 0.0.255.255
  deny   any
-ip access-list standard MULTICAST
- permit 239.0.0.0 0.0.0.255
-!
-ip access-list extended SEC
- permit esp object-group BRANCHES host 132.87.2.1
- permit gre object-group BRANCHES host 132.87.2.1
- permit icmp any host 132.87.2.1
- permit tcp host 132.87.2.254 host 132.87.2.1 eq bgp
- permit udp object-group BRANCHES host 132.87.2.1 eq isakmp
- permit udp object-group BRANCHES host 132.87.2.1 eq non500-isakmp
- permit udp host 132.87.2.254 host 132.87.2.1 eq ntp
- permit tcp any host 132.87.2.1 established
- permit udp any eq domain host 132.87.2.1
- permit udp any eq ntp host 132.87.2.1
+
 !
 !
 snmp-server group tyumen v3 priv
 snmp-server location Tyumen
-tftp-server flash:Desktops/320x212x16/List.xml
-tftp-server flash:Desktops/320x212x16/kremlin-crop.png
-tftp-server flash:Desktops/320x212x16/kremlin-crop-tn.png
-tftp-server flash:Desktops/320x212x16/kgb-crop.png
-tftp-server flash:Desktops/320x212x16/kgb-crop-tn.png
-tftp-server flash:RingList.xml
-tftp-server flash:business.raw
-tftp-server flash:panasonic.raw
-tftp-server flash:old.raw
-tftp-server flash:classic.raw
-tftp-server flash:electronic.raw
-tftp-server flash:MOH/MOH4.au
-!
-!
 !
 !
 control-plane
@@ -134,6 +124,94 @@ mgcp profile default
 !
 !
 ccm-manager music-on-hold
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ authorization exec CONSOLE
+ login authentication CONSOLE
+ transport input none
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ exec-timeout 0 0
+ transport input ssh
+line vty 5 14
+ exec-timeout 0 0
+ transport input ssh
+line vty 15
+ privilege level 15
+ rotary 1
+ transport input ssh
+!
+!
+end
+
+## DHCP
+
+ip domain name tnk-bp.ru
+ip multicast-routing distributed
+ip dhcp excluded-address 172.20.3.0 172.20.3.100
+ip dhcp excluded-address 172.20.3.200 172.20.3.254
+ip dhcp excluded-address 172.16.10.0 172.16.10.100
+ip dhcp excluded-address 172.16.10.200 172.16.10.254
+ip dhcp excluded-address 172.16.20.0 172.16.20.100
+ip dhcp excluded-address 172.16.20.200 172.16.20.254
+!
+ip dhcp pool WARSAW
+ network 172.20.3.0 255.255.255.0
+ default-router 172.20.3.254
+ dns-server 87.250.250.100
+ option 150 ip 172.20.3.254
+!
+ip dhcp pool KRAKOW
+ network 172.16.10.0 255.255.255.0
+ default-router 172.16.10.254
+ dns-server 87.250.250.100
+ option 150 ip 172.16.10.254
+!
+ip dhcp pool GDANSK
+ network 172.16.20.0 255.255.255.0
+ default-router 172.16.20.254
+ dns-server 87.250.250.100
+ option 150 ip 172.16.20.254
+
+## Ip phones
+
+
+voice service voip
+ ip address trusted list
+  ipv4 172.0.0.0 255.0.0.0
+  ipv4 10.0.0.0 255.0.0.0
+  ipv4 192.0.0.0 255.0.0.0
+ allow-connections h323 to h323
+ allow-connections h323 to sip
+ allow-connections sip to h323
+ allow-connections sip to sip
+ sip
+  bind control source-interface Loopback0
+  bind media source-interface Loopback0
+  registrar server
+!
+voice class codec 1
+ codec preference 1 g711alaw
+ codec preference 2 g711ulaw
+!
+!
+!
+!
+!
+voice register global
+ mode cme
+ source-address 10.99.99.99 port 5060
+ max-dn 10
+ max-pool 10
+ tftp-path flash:
+ file text
+ auto-register
+ !
 !
 !
 telephony-service
@@ -223,65 +301,165 @@ ephone  2
  paging-dn 4
  button  1:2
 !
+## Tunnels
+
+interface Tunnel1
+ ip address 10.99.0.10 255.255.255.0
+ no ip redirects
+ ip nat inside
+ ip authentication key-chain eigrp 100 EIGRP
+ ip pim sparse-mode
+ ip nhrp authentication cisco
+ ip nhrp map multicast 18.31.192.1
+ ip nhrp network-id 100
+ ip nhrp nhs 10.99.0.1 nbma 18.31.192.1
+ tunnel source GigabitEthernet0/0/1.100
+ tunnel mode gre multipoint
+ tunnel key 0
+ tunnel protection ipsec profile DMVPN_1 shared
+!
+interface Tunnel2
+ ip address 10.99.1.10 255.255.255.0
+ no ip redirects
+ ip nat inside
+ ip authentication key-chain eigrp 100 EIGRP
+ ip pim sparse-mode
+ ip nhrp authentication cisco
+ ip nhrp map multicast 18.31.192.2
+ ip nhrp network-id 101
+ ip nhrp nhs 10.99.1.1 nbma 18.31.192.2
+ tunnel source GigabitEthernet0/0/1.100
+ tunnel mode gre multipoint
+ tunnel key 1
+ tunnel protection ipsec profile DMVPN_1 shared
+
+
+## Crypto
+
+crypto pki trustpoint TP-self-signed-1487964702
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1487964702
+ revocation-check none
+ rsakeypair TP-self-signed-1487964702
+!
+crypto pki trustpoint tnk-bp
+ enrollment mode ra
+ enrollment url http://18.31.192.1:80/CertSrv/mscep/mscep.dll
+ fqdn MOW.tnk-bp.ru
+ subject-name CN=MOW.tnk-bp.ru
+ subject-alt-name MOW.tnk-bp.ru
+ revocation-check none
+ rsakeypair MOW.tnk-bp.ru
+!
+crypto pki trustpoint SLA-TrustPoint
+ enrollment pkcs12
+ revocation-check crl
+
+crypto ikev2 proposal DMVPN
+ encryption aes-cbc-128
+ integrity sha256
+ group 14
+!
+crypto ikev2 policy 1
+ proposal DMVPN
 !
 !
-line con 0
- exec-timeout 0 0
- authorization exec CONSOLE
- login authentication CONSOLE
- transport input none
- stopbits 1
-line aux 0
- stopbits 1
-line vty 0 4
- exec-timeout 0 0
- transport input ssh
-line vty 5 14
- exec-timeout 0 0
- transport input ssh
-line vty 15
- privilege level 15
- rotary 1
- transport input ssh
+crypto ikev2 profile DMVPN
+ match identity remote fqdn domain tnk-bp.ru
+ identity local fqdn MOW.tnk-bp.ru
+ authentication remote rsa-sig
+ authentication local rsa-sig
+ pki trustpoint tnk-bp
 !
+no crypto ikev2 http-url cert
+!
+!
+!
+!
+crypto isakmp policy 1
+ encr aes
+ hash sha256
+ authentication pre-share
+ group 14
+crypto isakmp key cisco address 0.0.0.0
+!
+!
+crypto ipsec transform-set DMVPN esp-aes esp-sha256-hmac
+ mode transport
+!
+crypto ipsec profile DMVPN_1
+ set transform-set DMVPN
+ set ikev2-profile DMVPN
+!
+crypto ipsec profile DMVPN_2
+ set transform-set DMVPN
+
+## license
+
+no license feature hseck9
+license udi pid ISR4321/K9 sn FDO22042002
+license accept end user agreement
+license boot suite FoundationSuiteK9
+license boot suite AdvUCSuiteK9
+license boot level appxk9
+license boot level uck9
+license boot level securityk9
+
+
+## usernames
+
+username mgmt privilege 15 secret 5 $1$xTRH$OoVKtLFE/m6WUK6/PbtuA1
+username wsc2019 privilege 15 secret Passw0rd$
+username MOW password 0 cisco
+username KVX password 0 cisco
+username YKS password 0 cisco
+
+## ntp
+
 ntp authentication-key 1 md5 1511021F0725 7
 ntp authenticate
 ntp trusted-key 1
 ntp server 8.8.8.8 key 1
+
+## TFTP
+
+tftp-server flash:Desktops/320x212x16/List.xml
+tftp-server flash:Desktops/320x212x16/kremlin-crop.png
+tftp-server flash:Desktops/320x212x16/kremlin-crop-tn.png
+tftp-server flash:Desktops/320x212x16/kgb-crop.png
+tftp-server flash:Desktops/320x212x16/kgb-crop-tn.png
+tftp-server flash:RingList.xml
+tftp-server flash:business.raw
+tftp-server flash:panasonic.raw
+tftp-server flash:old.raw
+tftp-server flash:classic.raw
+tftp-server flash:electronic.raw
+tftp-server flash:MOH/MOH4.au
+
+## acl's
+
+object-group network BRANCHES
+ host 100.10.9.5
+ host 94.121.72.1
+ host 18.31.192.1
+ host 18.31.192.2
+ host 18.31.192.3
+ host 132.87.2.1
+
+ip access-list standard MULTICAST
+ permit 239.0.0.0 0.0.0.255
 !
-!
-!
-!
-!
-end
+ip access-list extended SEC
+ permit esp object-group BRANCHES host 132.87.2.1
+ permit gre object-group BRANCHES host 132.87.2.1
+ permit icmp any host 132.87.2.1
+ permit tcp host 132.87.2.254 host 132.87.2.1 eq bgp
+ permit udp object-group BRANCHES host 132.87.2.1 eq isakmp
+ permit udp object-group BRANCHES host 132.87.2.1 eq non500-isakmp
+ permit udp host 132.87.2.254 host 132.87.2.1 eq ntp
+ permit tcp any host 132.87.2.1 established
+ permit udp any eq domain host 132.87.2.1
+ permit udp any eq ntp host 132.87.2.1
 
 
-## dhcp
 
-ip multicast-routing distributed
-ip dhcp excluded-address 172.20.3.0 172.20.3.100
-ip dhcp excluded-address 172.20.3.200 172.20.3.254
-ip dhcp excluded-address 172.16.10.0 172.16.10.100
-ip dhcp excluded-address 172.16.10.200 172.16.10.254
-ip dhcp excluded-address 172.16.20.0 172.16.20.100
-ip dhcp excluded-address 172.16.20.200 172.16.20.254
-!
-ip dhcp pool VLAN12
- network 172.20.3.0 255.255.255.0
- default-router 172.20.3.252
- dns-server 172.16.40.1
- option 150 ip 172.20.4.2
-!
-ip dhcp pool YKS
- network 172.16.10.0 255.255.255.0
- default-router 172.16.10.254
- dns-server 172.16.40.1
- option 150 ip 172.16.10.254
-!
-ip dhcp pool KVX
- network 172.16.20.0 255.255.255.0
- default-router 172.16.20.254
- dns-server 172.16.40.1
- option 150 ip 172.16.20.254
-!
-!
