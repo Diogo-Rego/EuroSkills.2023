@@ -1,9 +1,0 @@
-hostname KRAKOW
-
-ip domain name ict.pl
-ip multicast-routing distributed
-
-key chain EIGRP
- key 0
-  key-string cisco
-

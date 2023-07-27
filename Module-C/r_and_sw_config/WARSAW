@@ -31,7 +31,7 @@ interface Loopback0
 !
 !
 interface G2
- ip address 172.20.3.1 255.255.255.0
+ ip address 172.20.4.2 255.255.255.252
  ip nat inside
  ip authentication key-chain eigrp 100 EIGRP
  ip pim sparse-mode
@@ -164,7 +164,7 @@ ip dhcp pool WARSAW
  network 172.20.3.0 255.255.255.0
  default-router 172.20.3.254
  dns-server 87.250.250.100
- option 150 ip 172.20.3.254
+ option 150 ip 172.20.4.2
 !
 ip dhcp pool KRAKOW
  network 172.16.10.0 255.255.255.0
@@ -460,6 +460,3 @@ ip access-list extended SEC
  permit tcp any host 132.87.2.1 established
  permit udp any eq domain host 132.87.2.1
  permit udp any eq ntp host 132.87.2.1
-
-
-
