@@ -10,6 +10,16 @@
     ansible_ssh_pass: Passw0rd
   tasks:
 #-------------------------------------------------------------#
+    - name: update
+      apt:
+        update_cache: yes
+#-------------------------------------------------------------#
+    - name: Upgrade
+      apt:
+        upgrade: dist
+        autoremove: yes
+        autoclean: yes
+#-------------------------------------------------------------#
     - name: Install Apache2
       apt:
         name: apache2
@@ -51,21 +61,6 @@
     ssl_crt: SSLCertificateFile /etc/ssl/certs/www.enta.pt.crt
     ssl_key: SSLCertificateKeyFile /etc/ssl/private/www.enta.pt.key
   tasks:
-#-------------------------------------------------------------#
-    - name: update
-      apt:
-        update_cache: yes
-#-------------------------------------------------------------#
-    - name: Upgrade
-      apt:
-        upgrade: dist
-        autoremove: yes
-        autoclean: yes
-#-------------------------------------------------------------#
-    - name: Install Apache2
-      apt:
-        name: apache2
-        state: present
 #-------------------------------------------------------------#
     - name: Start Apache2 service
       service:
