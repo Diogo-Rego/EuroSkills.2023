@@ -1,0 +1,15 @@
+- name: Install sudo using become
+  hosts: bck-servers
+  become: yes  # This enables privilege escalation
+  become_method: su
+  gather_facts: false
+  vars:
+    ansible_become_password: Passw0rd!
+    ansible_become_timeout: 60
+    ansible_ssh_pass: Passw0rd!
+    my_sudo_password: Passw0rd!
+  tasks:
+    - name: Install sudo
+      apt:
+        name: sudo
+        state: present

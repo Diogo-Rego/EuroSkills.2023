@@ -1,18 +1,7 @@
+---
 - name: Change hostname
-  hosts: <name of the host or the group of hosts>
-  gather_facts: false
-  become: true
-  vars:
-    ansible_inventory: "hosts.ini"
-    ansible_ssh_pass: Passw0rd
-  tasks:
-#-------------------------------------------------------------#
-    - name: Change hostname
-      hostname:
-        name: "{{ <name of the variable> }}"
-      register: result
-#-------------------------------------------------------------#
-    - name: Set timezone to Europe/Warsaw
-      timezone:
-        name: Europe/Warsaw
-#-------------------------------------------------------------#
+  hostname:
+    name: "name"
+- name: Set timezone to Europe/Warsaw
+  timezone:
+    name: Europe/Warsaw

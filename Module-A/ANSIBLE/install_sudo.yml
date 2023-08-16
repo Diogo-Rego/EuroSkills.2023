@@ -1,0 +1,26 @@
+- name: Install sudo using become
+  hosts: bck-servers
+  become: true
+  gather_facts: false
+  vars:
+    ansible_ssh_pass: Passw0rd!
+    my_sudo_password: Passw0rd!
+  tasks:
+    #-------------------------------------------------------------#
+    - name: Install sudo
+      become: yes
+      become_method: su
+      vars:
+        ansible_become_password: Passw0rd!
+      apt:
+        name: sudo
+        state: present
+#-------------------------------------------------------------#
+    - name: Append to a file
+      become: yes
+      become_method: su
+      lineinfile:
+        path: /etc/sudoers
+        line: "localadmin ALL=(ALL:ALL) ALL"
+        create: no
+#-------------------------------------------------------------#

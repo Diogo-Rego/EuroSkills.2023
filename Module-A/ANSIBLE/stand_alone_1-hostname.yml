@@ -1,0 +1,20 @@
+- name: Change hostname and timezone
+  hosts: bck-servers
+  gather_facts: false
+  become: yes
+  become_method: su
+  vars:
+    ansible_become_password: Passw0rd!
+    ansible_inventory: "hosts.ini"
+    ansible_ssh_pass: Passw0rd!
+  tasks:
+#-------------------------------------------------------------#
+    - name: Change hostname
+      hostname:
+        name: "name"
+      register: result
+#-------------------------------------------------------------#
+    - name: Set timezone to Europe/Warsaw
+      timezone:
+        name: Europe/Warsaw
+#-------------------------------------------------------------#

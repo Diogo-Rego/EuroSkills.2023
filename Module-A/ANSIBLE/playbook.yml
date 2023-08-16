@@ -1,12 +1,26 @@
 ---
+- name: Your Playbook Name
+  hosts: bck-servers
+  gather_facts: false
+  become: yes
+  become_method: su
+  vars:
+    ansible_become_password: Passw0rd!
+    ansible_inventory: "hosts.ini"
+    ansible_ssh_pass: Passw0rd!
 
-- include_tasks: "1-hostname.yml"
+  tasks:
+    - name: Include hostname tasks
+      include_tasks: "1-hostname.yml"
 
-- include_tasks: "2-firewall.yml"
+    - name: Include firewall tasks
+      include_tasks: "2-firewall.yml"
 
-- include_tasks: "3a-backend.yml"
+      #- name: Include backend tasks (part a)
+      #include_tasks: "3a-backend.yml"
 
-- include_tasks: "3b-backend.yml"
+      #- name: Include backend tasks (part b)
+      #include_tasks: "3b-backend.yml"
 
-- include_tasks: "4-frontend.yml"
-
+      #- name: Include frontend tasks
+      #include_tasks: "4-frontend.yml"
