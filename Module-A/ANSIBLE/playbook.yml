@@ -1,26 +1,42 @@
----
-- name: Your Playbook Name
+- name: 1-hostname
+  hosts: bck-servers, frt-servers
+  gather_facts: false
+  become: yes
+  become_method: su
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+    ansible_become_password: Passw0rd!
+    ansible_inventory: "hosts.ini"
+    ansible_ssh_pass: Passw0rd!
+  tasks:
+    - name: Include hostname tasks
+      include_tasks: "1-hostname.yml"
+
+- name: 3a-backend
   hosts: bck-servers
   gather_facts: false
   become: yes
   become_method: su
   vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
     ansible_become_password: Passw0rd!
     ansible_inventory: "hosts.ini"
     ansible_ssh_pass: Passw0rd!
-
   tasks:
-    - name: Include hostname tasks
-      include_tasks: "1-hostname.yml"
+    - name: Include backend tasks (part a)
+      include_tasks: "3a-backend.yml"
+    - name: Include backend tasks (part b)
+      include_tasks: "3b-backend.yml"
 
-    - name: Include firewall tasks
-      include_tasks: "2-firewall.yml"
-
-      #- name: Include backend tasks (part a)
-      #include_tasks: "3a-backend.yml"
-
-      #- name: Include backend tasks (part b)
-      #include_tasks: "3b-backend.yml"
+  handlers:
+    - name: Restart Apache2
+      service:
+        name: apache2
+        state: restarted
 
       #- name: Include frontend tasks
       #include_tasks: "4-frontend.yml"
+
+
+      #     #    - name: Include firewall tasks
+      #include_tasks: "2-firewall.yml"

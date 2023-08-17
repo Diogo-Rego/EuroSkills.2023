@@ -1,50 +1,56 @@
----
-- name: ftp
-  hosts: web2
-  become: true
+--- #not working for some resoan
+- name: Install vsftpd package
+  apt:
+    name: vsftpd
+    state: present
+
+- name: Create web-group
+  group:
+    name: webmaster
+    state: present
+
+- name: Create FTP user webmaster
+  user:
+    name: webmaster
+    password: "{{ password | string | password_hash('sha512') }}"
+    create_home: yes
+    home: /var/www/html
+    shell: /sbin/nologin
+    system: yes
+    group: webmaster
+    state: present
   vars:
-    ansible_inventory: "hosts.ini"
-    ansible_ssh_pass: Passw0rd
-  tasks:
-#-------------------------------------------------------------#
-    - name: Install FTP server
-      apt:
-        name: vsftpd
-        state: present
-#-------------------------------------------------------------#
-    - name: Start and enable FTP server service
-      systemd:
-        name: vsftpd
-        state: started
-        enabled: yes
-#-------------------------------------------------------------#
-    - name: Copy FTP server configuration file
-      template:
-        src: vsftpd.conf
-        dest: /etc/vsftpd.conf
-        owner: root
-        group: root
-        mode: "0644"
-#-------------------------------------------------------------#
-    - name: Start and enable FTP server service
-      systemd:
-        name: vsftpd
-        state: stopped
-        enabled: no
-#-------------------------------------------------------------#
-    - name: copy ftp.enta.pt.crt from localhost
-      copy:
-        src: "/Users/bosserman/Downloads/ftp.enta.pt.crt"
-        dest: "/etc/ssl/certs/"
-#-------------------------------------------------------------#
-    - name: copy ftp.enta.pt.key from localhost
-      copy:
-        src: "/Users/bosserman/Downloads/ftp.enta.pt.key"
-        dest: "/etc/ssl/private/"
-#-------------------------------------------------------------#
-    - name: Start and enable FTP server service
-      systemd:
-        name: vsftpd
-        state: started
-        enabled: yes
-#-------------------------------------------------------------#
+    password: Passw0rd!
+
+- name: Remove default vsftpd.conf
+  file:
+    path: /etc/vsftpd.conf
+    state: absent
+
+- name: put the vsftpd.conf
+  template:
+    src: "vsftpd.conf.j2"
+    dest: "/etc/vsftpd.conf"
+
+- name: Set ownership of /var/www/html
+  file:
+    path: /var/www/html
+    owner: webmaster
+    group: webmaster
+    state: directory
+    recurse: yes
+
+- name: Ensure vsftpd.chroot_list file exists
+  file:
+    path: /etc/vsftpd.chroot_list
+    state: touch
+
+- name: Add webmaster user to vsftpd.chroot_list
+  lineinfile:
+    path: /etc/vsftpd.chroot_list
+    line: "webmaster"
+
+- name: Restart vsftpd service
+  service:
+    name: vsftpd
+    state: restarted

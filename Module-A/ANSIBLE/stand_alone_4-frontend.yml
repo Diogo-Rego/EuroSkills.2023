@@ -1,0 +1,57 @@
+---
+- name: configure HA proxy and VRRP for frontend webservers
+  hosts: <hosts name>
+  become: true
+  vars:
+    ansible_inventory: "hosts.ini"
+    ansible_ssh_pass: Passw0rd
+  tasks:
+#-------------------------------------------------------------#
+    - name: Install HAProxy
+      apt:
+        name: haproxy
+        state: present
+#-------------------------------------------------------------#
+    - name: Install VRRP
+      apt:
+        name: keepalived
+        state: present
+#-------------------------------------------------------------#
+    - name:
+      template:
+        src: haproxy.cfg
+        dest: /etc/haproxy/haproxy.cfg
+      notify:
+        - restart HAProxy
+#-------------------------------------------------------------#
+    - name: start and enable HAProxy service
+      service:
+        name: HAProxy
+        state: started
+        enabled: true
+#-------------------------------------------------------------#
+    - name: configure VRRP
+      template:
+        src: keepalived.conf
+        dest: /etc/keepalived/keepalived.conf
+      notify:
+        - restart VRRP
+#-------------------------------------------------------------#
+    - name: start and enable vrrp
+      service:
+        name: keepalived
+        state: started
+        enabled: true
+#-------------------------------------------------------------#
+  handlers:
+#-------------------------------------------------------------#
+    - name: restart HAProxy
+      service:
+        name: haproxy
+        state: restarted
+#-------------------------------------------------------------#
+    - name: restart VRRP
+      service:
+        name: keepalived
+        state: restarted
+#-------------------------------------------------------------#

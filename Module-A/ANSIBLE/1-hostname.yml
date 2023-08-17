@@ -1,7 +1,9 @@
 ---
 - name: Change hostname
   hostname:
-    name: "name"
+    name: "{{ inventory_hostname }}"
+#-------------------------------------------------------------#
 - name: Set timezone to Europe/Warsaw
   timezone:
     name: Europe/Warsaw
+#-------------------------------------------------------------#

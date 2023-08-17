@@ -1,0 +1,123 @@
+### without ssl
+
+---
+- name: Install and configure Apache2
+  hosts: web1
+  become: true
+  gather_facts: false
+  vars:
+    ansible_inventory: "hosts.ini"
+    ansible_ssh_pass: Passw0rd
+  tasks:
+#-------------------------------------------------------------#
+    - name: update
+      apt:
+        update_cache: yes
+#-------------------------------------------------------------#
+    - name: Upgrade
+      apt:
+        upgrade: dist
+        autoremove: yes
+        autoclean: yes
+#-------------------------------------------------------------#
+    - name: Install Apache2
+      apt:
+        name: apache2
+        state: present
+#-------------------------------------------------------------#
+    - name: Start Apache2 service
+      service:
+        name: apache2
+        state: started
+        enabled: true
+#-------------------------------------------------------------#
+    - name: Remove default Apache2 index.html
+      file:
+        path: /var/www/html/index.html
+        state: absent
+#-------------------------------------------------------------#
+    - name: change site
+      copy:
+        src: "index.html"
+        dest: "/var/www/html/index.html"
+      notify:
+        - Restart Apache2
+#-------------------------------------------------------------#
+  handlers:
+    - name: Restart Apache2
+      service:
+        name: apache2
+        state: restarted
+#-------------------------------------------------------------#
+
+### with ssl
+
+---
+- name: Install and configure Apache2
+  hosts: web1
+  become: true
+  gather_facts: false
+  vars:
+    ssl_crt: SSLCertificateFile /etc/ssl/certs/www.enta.pt.crt
+    ssl_key: SSLCertificateKeyFile /etc/ssl/private/www.enta.pt.key
+  tasks:
+#-------------------------------------------------------------#
+    - name: Start Apache2 service
+      service:
+        name: apache2
+        state: started
+        enabled: true
+#-------------------------------------------------------------#
+    - name: Replace SSL Certificate Path
+      lineinfile:
+        path: /etc/apache2/sites-available/default-ssl.conf
+        regexp: '^(\s*SSLCertificateFile\s+).*'
+        line: '{{ ssl_crt }}'
+#-------------------------------------------------------------#
+    - name: Replace SSL Private Key Path
+      lineinfile:
+        path: /etc/apache2/sites-available/default-ssl.conf
+        regexp: '^(\s*SSLCertificateKeyFile\s+).*'
+        line: '{{ ssl_key }}'
+#-------------------------------------------------------------#
+    - name: enable Apache SSL module
+      command: >
+        a2enmod ssl
+      notify:
+        - Restart Apache2
+
+#    - name: Enable SSL module
+#      apache2_module:
+#        name: ssl
+#        state: present
+#      notify:
+#        - Restart Apache2
+#-------------------------------------------------------------#
+    - name: enable Apache site SSL module
+      command: >
+        a2ensite default-ssl.conf
+      notify:
+        - Restart Apache2
+#    - name: Enable SSL site
+#      apache2_site:
+#        name: default-ssl
+#        state: present
+#      notify:
+#        - Restart Apache2
+#-------------------------------------------------------------#
+    - name: Remove default Apache2 index.html
+      file:
+        path: /var/www/html/index.html
+        state: absent
+#-------------------------------------------------------------#
+    - name: change site
+      copy:
+        src: "index.html"
+        dest: "/var/www/html/index.html"
+#-------------------------------------------------------------#
+  handlers:
+    - name: Restart Apache2
+      service:
+        name: apache2
+        state: restarted
+#-------------------------------------------------------------#
