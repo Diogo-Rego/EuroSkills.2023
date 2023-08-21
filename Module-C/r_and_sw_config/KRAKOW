@@ -1,7 +1,5 @@
 hostname KRAKOW
 !
-
-!
 key chain EIGRP
  key 0
   key-string cisco
@@ -59,9 +57,6 @@ ip access-list standard ACL_FOR_NAT
  permit 10.0.0.0 0.255.255.255
  permit 192.168.0.0 0.0.255.255
  deny   any
-!
-
-!
 !
 control-plane
 !

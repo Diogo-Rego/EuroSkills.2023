@@ -1,0 +1,113 @@
+Building configuration...
+
+Current configuration : 3751 bytes
+!
+! Last configuration change at 06:49:14 CEST Mon Aug 21 2023
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname ACC1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no logging console
+!
+no aaa new-model
+!
+
+!
+!
+ip domain-name ict.pl
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode mst
+spanning-tree portfast edge default
+spanning-tree portfast edge bpduguard default
+spanning-tree extend system-id
+!
+spanning-tree mst configuration
+ instance 1 vlan 11-12
+!
+!
+interface GigabitEthernet0/0
+ switchport access vlan 12
+ switchport mode access
+ switchport nonegotiate
+ negotiation auto
+ spanning-tree bpduguard disable
+!
+interface GigabitEthernet0/1
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ switchport trunk allowed vlan 1-665,667-4094
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 666
+ switchport mode trunk
+ switchport nonegotiate
+ negotiation auto
+ spanning-tree bpduguard disable
+!
+interface GigabitEthernet1/3
+ switchport trunk allowed vlan 1-665,667-4094
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 666
+ switchport mode trunk
+ switchport nonegotiate
+ negotiation auto
+ spanning-tree bpduguard disable
+!
+interface Vlan12
+ ip address 172.20.3.91 255.255.255.0
+!
+ip forward-protocol nd
+!
+ip http server
+ip http secure-server
+!
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 0 0
+ login
+!
+ntp authentication-key 1 md5 1511021F0725 7
+ntp authenticate
+ntp trusted-key 1
+ntp server 10.99.99.99 key 1
+!
+end
