@@ -18,19 +18,22 @@ object-group network BRANCHES
 
 interface G3
  ip address 172.16.20.254 255.255.255.0
- ip helper-address 10.99.99.99
+ ip helper-address 10.0.20.1
  ip nat inside
+ no shut
 !
 interface G2
  ip address 94.121.72.1 255.255.255.0
  ip nat outside
  ip access-group SEC in
+ no shut
 !
 interface g4
  ip address 10.0.20.2 255.255.255.252
  ip nat inside
  ip authentication key-chain eigrp 100 EIGRP
  ip pim sparse-mode
+ no shut
 !
 router eigrp 100
  network 10.0.20.0 0.0.0.3

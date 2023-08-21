@@ -15,23 +15,27 @@ interface G2
  ip authentication key-chain eigrp 100 EIGRP
  ip pim sparse-mode
  negotiation auto
+ no shut
 !
 interface G1
  ip address 132.87.2.1 255.255.255.0
  ip nat outside
  ip access-group SEC in
+ no shut
 !
 interface G3
  ip address 10.0.10.1 255.255.255.252
  ip nat inside
  ip authentication key-chain eigrp 100 EIGRP
  ip pim sparse-mode
+ no shut
 !
 interface G4
  ip address 10.0.20.1 255.255.255.252
  ip nat inside
  ip authentication key-chain eigrp 100 EIGRP
  ip pim sparse-mode
+ no shut
 !
 router eigrp 100
  network 10.0.10.0 0.0.0.3
@@ -113,6 +117,8 @@ archive
 
 ip domain name tnk-bp.ru
 ip multicast-routing distributed
+
+
 ip dhcp excluded-address 172.20.3.0 172.20.3.100
 ip dhcp excluded-address 172.20.3.200 172.20.3.254
 ip dhcp excluded-address 172.16.10.0 172.16.10.100
