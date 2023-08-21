@@ -1,0 +1,357 @@
+hostname GDANSK
+!
+key chain EIGRP
+ key 0
+  key-string cisco
+!
+diagnostic bootup level minimal
+spanning-tree extend system-id
+!
+object-group network BRANCHES
+ host 100.10.9.5
+ host 94.121.72.1
+ host 18.31.192.1
+ host 18.31.192.2
+ host 18.31.192.3
+ host 132.87.2.1
+!
+
+interface G3
+ ip address 172.16.20.254 255.255.255.0
+ ip helper-address 10.99.99.99
+ ip nat inside
+!
+interface G2
+ ip address 94.121.72.1 255.255.255.0
+ ip nat outside
+ ip access-group SEC in
+!
+interface g4
+ ip address 10.0.20.2 255.255.255.252
+ ip nat inside
+ ip authentication key-chain eigrp 100 EIGRP
+ ip pim sparse-mode
+!
+router eigrp 100
+ network 10.0.20.0 0.0.0.3
+ network 10.99.0.0 0.0.0.255
+ network 10.99.1.0 0.0.0.255
+ network 172.16.20.0 0.0.0.255
+ redistribute static metric 1000000 0 255 1 1500
+ passive-interface default
+ no passive-interface g2
+!
+router bgp 65003
+ bgp router-id 10.0.20.2
+ bgp log-neighbor-changes
+ neighbor 94.121.72.254 remote-as 65000
+ !
+ address-family ipv4
+  network 94.121.72.0 mask 255.255.255.0
+  neighbor 94.121.72.254 activate
+ exit-address-family
+!
+ip nat inside source list ACL_FOR_NAT interface G2 overload
+
+ip route 0.0.0.0 0.0.0.0 94.121.72.254
+!
+ip ssh version 2
+!
+!
+ip access-list standard ACL_FOR_NAT
+ permit 172.0.0.0 0.255.255.255
+ permit 10.0.0.0 0.255.255.255
+ permit 192.168.0.0 0.0.255.255
+ deny   any
+!
+control-plane
+!
+line con 0
+ exec-timeout 0 0
+ stopbits 1
+line vty 0 4
+ exec-timeout 0 0
+ transport input ssh
+line vty 5 14
+ exec-timeout 0 0
+ transport input ssh
+line vty 15
+ privilege level 15
+ transport input ssh
+!
+
+
+
+### wtf is this
+
+service timestamps debug datetime msec
+service timestamps log datetime msec
+platform qfp utilization monitor load 80
+no platform punt-keepalive disable-kernel-core
+
+
+
+
+
+###  wtf is this
+
+multilink bundle-name authenticated
+
+subscriber templating
+
+boot-start-marker
+boot-end-marker
+
+### aaa
+
+aaa new-model
+!
+aaa authentication login default local
+aaa authentication login CONSOLE none
+aaa authorization exec default local if-authenticated
+aaa authorization exec CONSOLE none
+!
+aaa session-id common
+
+
+
+### license
+
+license udi pid ISR4321/K9 sn FDO22041X34
+license accept end user agreement
+license boot suite FoundationSuiteK9
+license boot suite AdvUCSuiteK9
+
+### username
+
+username mgmt privilege 15 secret 5 $1$aoMg$R7INmLErdx73Kk./JapCY.
+username YKS password 0 cisco
+username KVX password 0 cisco
+username MOW password 0 cisco
+
+### crypto
+
+crypto pki trustpoint TP-self-signed-619521367
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-619521367
+ revocation-check none
+ rsakeypair TP-self-signed-619521367
+!
+crypto pki trustpoint tnk-bp
+ enrollment mode ra
+ enrollment url http://18.31.192.1:80/CertSrv/mscep/mscep.dll
+ fqdn KVX.tnk-bp.ru
+ subject-name CN=KVX.tnk-bp.ru
+ revocation-check none
+ rsakeypair KVX.tnk-bp.ru
+
+
+crypto ikev2 proposal DMVPN
+ encryption aes-cbc-128
+ integrity sha256
+ group 14
+!
+crypto ikev2 policy 1
+ proposal DMVPN
+!
+crypto ikev2 keyring DMVPN
+ peer DMVPN
+  address 0.0.0.0 0.0.0.0
+  pre-shared-key cisco
+ !
+!
+!
+crypto ikev2 profile DMVPN
+ match identity remote fqdn domain tnk-bp.ru
+ identity local fqdn KVX.tnk-bp.ru
+ authentication remote rsa-sig
+ authentication local rsa-sig
+ keyring local DMVPN
+ pki trustpoint tnk-bp
+!
+no crypto ikev2 http-url cert
+!
+!
+crypto ipsec transform-set DMVPN esp-aes esp-sha256-hmac
+ mode transport
+!
+crypto ipsec profile DMVPN_1
+ set transform-set DMVPN
+ set ikev2-profile DMVPN
+
+
+
+### Tunnel
+
+ no passive-interface Tunnel1
+ no passive-interface Tunnel2
+
+interface Tunnel1
+ ip address 10.99.0.11 255.255.255.0
+ no ip redirects
+ ip authentication key-chain eigrp 100 EIGRP
+ ip pim sparse-mode
+ ip nhrp authentication cisco
+ ip nhrp map multicast 18.31.192.1
+ ip nhrp network-id 100
+ ip nhrp nhs 10.99.0.1 nbma 18.31.192.1
+ tunnel source GigabitEthernet0/0/0.120
+ tunnel mode gre multipoint
+ tunnel key 0
+ tunnel protection ipsec profile DMVPN_1 shared
+!
+interface Tunnel2
+ ip address 10.99.1.11 255.255.255.0
+ no ip redirects
+ ip authentication key-chain eigrp 100 EIGRP
+ ip pim sparse-mode
+ ip nhrp authentication cisco
+ ip nhrp map multicast 18.31.192.2
+ ip nhrp network-id 101
+ ip nhrp nhs 10.99.1.1 nbma 18.31.192.2
+ tunnel source GigabitEthernet0/0/0.120
+ tunnel mode gre multipoint
+ tunnel key 1
+ tunnel protection ipsec profile DMVPN_1 shared
+
+
+
+### ip
+
+ip domain name tnk-bp.ru
+ip multicast-routing distributed
+
+ip forward-protocol nd
+ip http server
+ip http authentication local
+ip http secure-server
+ip tftp source-interface GigabitEthernet0/0/0.20
+
+### acl
+
+ip access-list extended SEC
+ permit esp object-group BRANCHES host 94.121.72.1
+ permit gre object-group BRANCHES host 94.121.72.1
+ permit icmp any host 94.121.72.1
+ permit tcp host 94.121.72.254 host 94.121.72.1 eq bgp
+ permit udp object-group BRANCHES host 94.121.72.1 eq isakmp
+ permit udp object-group BRANCHES host 94.121.72.1 eq non500-isakmp
+ permit tcp any host 94.121.72.1 established
+ permit udp any eq domain host 94.121.72.1
+
+### snmp
+
+snmp-server group tyumen v3 priv
+snmp-server location Kirov
+
+### wtf is this
+
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+
+
+### ip phones
+
+
+
+voice service voip
+ ip address trusted list
+  ipv4 172.0.0.0 255.0.0.0
+  ipv4 10.0.0.0 255.0.0.0
+  ipv4 192.0.0.0 255.0.0.0
+ allow-connections h323 to h323
+ allow-connections h323 to sip
+ allow-connections sip to h323
+ allow-connections sip to sip
+ sip
+  bind control source-interface Gi0/0/0.20
+  bind media source-interface Gi0/0/0.20
+  registrar server
+!
+voice class codec 1
+ codec preference 1 g711alaw
+ codec preference 2 g711ulaw
+!
+!
+!
+!
+!
+voice register global
+ mode cme
+ source-address 172.16.20.254 port 5060
+ max-dn 10
+ max-pool 10
+ tftp-path flash:
+ file text
+ auto-register
+
+
+telephony-service
+ no auto-reg-ephone
+ max-ephones 10
+ max-dn 20
+ ip source-address 172.16.20.254 port 2000
+ system message KVX
+ max-conferences 8 gain -6
+ moh enable-g711 "flash:MOH/MOH2.au"
+ multicast moh 239.0.2.1 port 2000 route 172.20.3.253 172.20.3.254
+ transfer-system full-consult
+ directory entry 1 101 name Kremlin
+ directory entry 2 102 name KGB
+ directory entry 3 201 name Ivan
+ directory entry 4 301 name Yuri
+ directory entry 5 401 name Boris
+ create cnf-files version-stamp 7960 Aug 13 2019 18:13:19
+!
+!
+dial-peer voice 1 voip
+ destination-pattern 1..
+ session target ipv4:10.99.99.99
+ voice-class codec 1
+!
+dial-peer voice 2 voip
+ destination-pattern 999
+ session target ipv4:10.99.99.99
+ voice-class codec 1
+!
+dial-peer voice 3 voip
+ destination-pattern 888
+ session target ipv4:10.99.99.99
+ voice-class codec 1
+!
+dial-peer voice 4 voip
+ destination-pattern 2..
+ session target ipv4:172.16.10.254
+ voice-class codec 1
+!
+dial-peer voice 5 voip
+ destination-pattern 4..
+ session target ipv4:172.16.10.254
+ voice-class codec 1
+!
+!
+!
+ephone-dn  1  octo-line
+ number 301
+ label Yuri
+ description Yuri
+ name Yuri
+!
+!
+ephone  1
+ device-security-mode none
+ mac-address CCCC.CCCC.CCCC
+ speed-dial 1 201 label "Ivan"
+ type CIPC
+ button  1:1
+
+### ntp
+
+ntp authentication-key 1 md5 1511021F0725 7
+ntp authenticate
+ntp trusted-key 1
+ntp server 10.99.99.99 key 1

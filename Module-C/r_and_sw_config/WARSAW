@@ -1,34 +1,13 @@
 hostname WARSAW
 !
-!
 clock timezone GMT 2 0
-!
 !
 key chain EIGRP
  key 0
   key-string cisco
 !
-!
 diagnostic bootup level minimal
 spanning-tree extend system-id
-!
-!
-archive
- path tftp://172.16.40.3/$h
- write-memory
-!
-!
-memory free low-watermark processor 67180
-!
-!
-redundancy
- mode none
-!
-!
-interface Loopback0
- ip address 10.99.99.99 255.255.255.255
- ip pim sparse-mode
-!
 !
 interface G2
  ip address 172.20.4.2 255.255.255.252
@@ -37,48 +16,37 @@ interface G2
  ip pim sparse-mode
  negotiation auto
 !
-!
 interface G1
  ip address 132.87.2.1 255.255.255.0
  ip nat outside
  ip access-group SEC in
-!
 !
 interface G3
  ip address 10.0.10.1 255.255.255.252
  ip nat inside
  ip authentication key-chain eigrp 100 EIGRP
  ip pim sparse-mode
- encapsulation ppp
- ppp authentication chap
-!
 !
 interface G4
  ip address 10.0.20.1 255.255.255.252
  ip nat inside
  ip authentication key-chain eigrp 100 EIGRP
  ip pim sparse-mode
- encapsulation ppp
- ppp authentication chap
-!
 !
 router eigrp 100
  network 10.0.10.0 0.0.0.3
  network 10.0.20.0 0.0.0.3
--> network 10.99.0.0 0.0.0.255
--> network 10.99.1.0 0.0.0.255 ## don't know what is this ip is from
- network 10.99.99.99 0.0.0.0
+ network 10.99.0.0 0.0.0.255
+ network 10.99.1.0 0.0.0.255
  network 172.20.3.0 0.0.0.255
  redistribute static metric 1000000 0 255 1 1500
  passive-interface default
--> no passive-interface Tunnel1
--> no passive-interface Tunnel2
  no passive-interface G2
  no passive-interface G3
  no passive-interface G4
 !
-!
 router bgp 65001
+ bgp router-id 10.0.10.1
  bgp log-neighbor-changes
  neighbor 132.87.2.254 remote-as 65000
  !
@@ -87,53 +55,21 @@ router bgp 65001
   neighbor 132.87.2.254 activate
  exit-address-family
 !
-ip nat inside source list ACL_FOR_NAT interface GigabitEthernet0/0/1.100 overload
-ip forward-protocol nd
-ip http server
-ip http authentication local
-ip http secure-server
-ip tftp source-interface GigabitEthernet0/0/0
+ip nat inside source list ACL_FOR_NAT interface g1 overload
 ip route 0.0.0.0 0.0.0.0 132.87.2.254
 !
-ip ssh port 2222 rotary 1
 ip ssh version 2
-ip scp server enable
-!
 !
 ip access-list standard ACL_FOR_NAT
  permit 172.0.0.0 0.255.255.255
  permit 10.0.0.0 0.255.255.255
  permit 192.168.0.0 0.0.255.255
  deny   any
-
-!
-!
-snmp-server group tyumen v3 priv
-snmp-server location Tyumen
-!
 !
 control-plane
 !
-!
-mgcp behavior rsip-range tgcp-only
-mgcp behavior comedia-role none
-mgcp behavior comedia-check-media-src disable
-mgcp behavior comedia-sdp-force disable
-!
-mgcp profile default
-!
-!
-ccm-manager music-on-hold
-!
-!
-!
 line con 0
  exec-timeout 0 0
- authorization exec CONSOLE
- login authentication CONSOLE
- transport input none
- stopbits 1
-line aux 0
  stopbits 1
 line vty 0 4
  exec-timeout 0 0
@@ -143,11 +79,35 @@ line vty 5 14
  transport input ssh
 line vty 15
  privilege level 15
- rotary 1
  transport input ssh
-!
-!
-end
+
+### lo
+
+interface Loopback0
+ ip address 10.99.99.99 255.255.255.255
+ ip pim sparse-mode
+
+### ip
+
+ip scp server enable
+
+ip forward-protocol nd
+ip http server
+ip http authentication local
+ip http secure-server
+ip tftp source-interface GigabitEthernet0/0/0
+
+### snmp
+
+snmp-server group tyumen v3 priv
+snmp-server location Tyumen
+
+### archive
+
+archive
+ path tftp://172.16.40.3/$h
+ write-memory
+
 
 ## DHCP
 
@@ -302,6 +262,8 @@ ephone  2
  button  1:2
 !
 ## Tunnels
+  no passive-interface Tunnel1
+  no passive-interface Tunnel2
 
 interface Tunnel1
  ip address 10.99.0.10 255.255.255.0
@@ -460,3 +422,19 @@ ip access-list extended SEC
  permit tcp any host 132.87.2.1 established
  permit udp any eq domain host 132.87.2.1
  permit udp any eq ntp host 132.87.2.1
+
+
+### wtf is this
+
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+ccm-manager music-on-hold
+
+
+memory free low-watermark processor 67180
