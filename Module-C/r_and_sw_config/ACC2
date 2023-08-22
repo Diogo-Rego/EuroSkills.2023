@@ -1,37 +1,7 @@
-Building configuration...
 
-Current configuration : 3751 bytes
-!
-! Last configuration change at 06:40:02 CEST Mon Aug 21 2023
-!
-version 15.2
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
-service compress-config
-!
 hostname ACC2
 !
-boot-start-marker
-boot-end-marker
-!
-!
-no logging console
-!
-no aaa new-model
-clock timezone CEST 2 0
-!
-!
-!
-!
-!
-!
-!
-!
-ip domain-name ict.pl
-ip cef
-no ipv6 cef
-!
+
 !
 !
 spanning-tree mode mst
@@ -41,17 +11,6 @@ spanning-tree extend system-id
 !
 spanning-tree mst configuration
  instance 1 vlan 11-12
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
 !
 !
 !
@@ -100,6 +59,67 @@ interface GigabitEthernet1/3
 interface Vlan12
  ip address 172.20.3.92 255.255.255.0
 !
+
+!
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 0 0
+ login local
+
+
+
+
+
+
+
+
+
+
+Building configuration...
+
+Current configuration : 3751 bytes
+!
+! Last configuration change at 06:40:02 CEST Mon Aug 21 2023
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+
+
+
+
+
+
+boot-start-marker
+boot-end-marker
+!
+!
+no logging console
+!
+no aaa new-model
+clock timezone CEST 2 0
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain-name ict.pl
+ip cef
+no ipv6 cef
+!
+
+
+
+
 ip forward-protocol nd
 !
 ip http server
@@ -115,42 +135,9 @@ ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
 !
 control-plane
 !
-banner exec ^C
-IOSv - Cisco Systems Confidential -
 
-Supplemental End User License Restrictions
 
-This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
 
-By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
-^C
-banner incoming ^C
-IOSv - Cisco Systems Confidential -
-
-Supplemental End User License Restrictions
-
-This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
-
-By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
-^C
-banner login ^C
-IOSv - Cisco Systems Confidential -
-
-Supplemental End User License Restrictions
-
-This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
-
-By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
-^C
-!
-line con 0
- exec-timeout 0 0
- logging synchronous
-line aux 0
-line vty 0 4
- exec-timeout 0 0
- login
-!
 ntp authentication-key 1 md5 1511021F0725 7
 ntp authenticate
 ntp trusted-key 1
