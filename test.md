@@ -8,5 +8,5 @@
 #<a href="https://www.google.com" target="_blank"><img src="./Module-A/img/EasyRSA.png" alt="Buy Me A Coffee" height="50" width="50"></a>
 
 - [x] #739
-- [ ] https://github.com/octo-org/octo-repo/issues/740
+- [ ] General Configuration [ [test](https://www.google.com) ]
 - [ ] Add delight to the experience when all tasks are complete :tada:
