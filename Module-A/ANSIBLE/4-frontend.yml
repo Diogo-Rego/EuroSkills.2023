@@ -1,0 +1,40 @@
+- name: Install HAProxy
+  apt:
+    name: haproxy
+    state: present
+
+- name: Install VRRP
+  apt:
+    name: keepalived
+    state: present
+
+- name: Copy SSL certificate files
+  copy:
+    src: /etc/ssl/cert/ftp.crt
+    dest: /etc/haproxy/
+  notify: restart HAProxy
+
+
+- name: Configure HAProxy
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+  notify: restart HAProxy
+
+- name: start and enable HAProxy service
+  service:
+    name: haproxy
+    state: started
+    enabled: true
+
+- name: Copy keepalived configuration
+  template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+  notify: restart VRRP
+
+- name: start and enable vrrp
+  service:
+    name: keepalived
+    state: started
+    enabled: true

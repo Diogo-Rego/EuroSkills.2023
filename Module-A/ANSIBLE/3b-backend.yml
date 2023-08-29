@@ -22,6 +22,20 @@
   vars:
     password: Passw0rd!
 
+- name: copy ftp.crt
+  copy:
+    src: "/etc/ssl/certs/ftp.crt"
+    dest: "/etc/ssl/certs/"
+
+- name: copy ftp.key
+  copy:
+    src: "/etc/ssl/private/ftp.key"
+    dest: "/etc/ssl/private/"
+- name: copy ca.crt
+  copy:
+    src: "/etc/ssl/certs/ca.crt"
+    dest: "/etc/ssl/certs/"
+
 - name: Remove default vsftpd.conf
   file:
     path: /etc/vsftpd.conf

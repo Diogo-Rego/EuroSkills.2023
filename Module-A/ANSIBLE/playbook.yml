@@ -1,4 +1,4 @@
-- name: 1-hostname
+- name: 1
   hosts: bck-servers, frt-servers
   gather_facts: false
   become: yes
@@ -12,7 +12,7 @@
     - name: Include hostname tasks
       include_tasks: "1-hostname.yml"
 
-- name: 3a-backend
+- name: 3
   hosts: bck-servers
   gather_facts: false
   become: yes
@@ -27,15 +27,39 @@
       include_tasks: "3a-backend.yml"
     - name: Include backend tasks (part b)
       include_tasks: "3b-backend.yml"
-
   handlers:
     - name: Restart Apache2
       service:
         name: apache2
         state: restarted
 
-      #- name: Include frontend tasks
-      #include_tasks: "4-frontend.yml"
+
+- name: 4
+  hosts: frt-servers
+  gather_facts: false
+  become: yes
+  become_method: su
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+    ansible_become_password: Passw0rd!
+    ansible_inventory: "hosts.ini"
+    ansible_ssh_pass: Passw0rd!
+  tasks:
+    - name: Include frontend tasks
+      include_tasks: "4-frontend.yml"
+
+  handlers:
+    - name: restart HAProxy
+      service:
+        name: haproxy
+        state: restarted
+
+    - name: restart VRRP
+      service:
+        name: keepalived
+        state: restarted
+
+
 
 
       #     #    - name: Include firewall tasks

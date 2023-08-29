@@ -1,0 +1,41 @@
+hostname HQFW
+
+key chain EIGRP
+ key 0
+  key-string cisco
+
+interface GigabitEthernet0/0
+ no shut
+ nameif edge
+ security-level 0
+ ip address 172.20.4.1 255.255.255.252
+
+interface GigabitEthernet0/1
+ no shut
+ nameif core_1
+ security-level 0
+ ip address 172.20.1.2 255.255.255.252
+
+interface GigabitEthernet0/2
+ no shut
+ nameif core_2
+ security-level 0
+ ip address 172.20.2.2 255.255.255.252
+
+router eigrp 100
+ network 172.20.1.0 255.255.255.252
+ network 172.20.2.0 255.255.255.252
+ network 172.20.4.0 255.255.255.252
+
+dhcprelay server 172.20.4.2 edge
+dhcprelay enable core_1
+dhcprelay enable core_2
+dhcprelay setroute edge
+dhcprelay setroute core_1
+dhcprelay timeout 60
+
+
+ntp authentication-key 1 md5 *****
+ntp authenticate
+ntp trusted-key 1
+ntp server 10.99.99.99 key 1
